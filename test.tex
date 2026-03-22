@@ -1,0 +1,102 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- Präambel (Einstellungen) ---
+\usepackage[utf8]{inputenc}
+% \usepackage[]{babel}    % Deutsche Rechtschreibung & Trennung
+\usepackage[T1]{fontenc}       % Schöne Schriftarten
+\usepackage{amsmath}           % Für Profi-Mathe
+\usepackage{graphicx}
+\usepackage{color}
+
+
+% \usepackage{modiagram}
+\input{lib/orbitals.tex}
+
+\graphicspath{{res/chemsketch/}}
+
+\title{MO Diagram Integration for LaTeX}
+\author{thevicraft}
+\date{\today}
+
+
+\begin{document}
+
+\maketitle
+
+\newpage
+\listoffigures
+\newpage
+
+\section{Introduction}
+some text.
+
+\section{Now some Diagrams}
+
+\begin{tikzpicture}
+    \initdiagram
+    \orbital{6}{0}{$d_{xz}$}{up}
+    \orbital{0}{0}{$d_{xz}$}{down}
+    \orbital{0}{3}{$d_{xz}$}{pair}
+
+    \nondegenerate{6}{2s}{left}{up}
+    \nondegenerate{6}{$\sigma$}{middle}{pair}
+    \nondegenerate{6}{2s}{right}{up}
+
+    \twicedegenerate{4}{a}{b}{left}{up}{up}
+    \twicedegenerate{4}{a}{b}{middle}{pair}{pair}
+    \twicedegenerate{4}{a}{b}{right}{down}{up}
+
+    \tripledegenerate{2}{a}{b}{c}{middle}{pair}{pair}{pair}
+    \tripledegenerate{1}{a}{b}{c}{right}{pair}{pair}{pair}
+
+    \degenerate{-2}{v/pair,g/up,u/down,h/pair}{left}
+
+    \connecttriple{-2/4/2/3/1/3}
+    \connecttriple{4/2/6/1/4/2}
+
+    \connecttriple{0/1/0/1/0/0}
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+    \initdiagram
+    \def\columndistance{5}
+
+    \def\electroncolor{brown}
+    \overlapp{7.5/{4s/}}{0.5/{$\sigma$/pair},9.5/{$\sigma^*$/}}{2.0/{LGO/pair,/pair,/pair,/pair,/pair,/pair}}%a1g
+    \overlapp{9.0/{4p/,/,/}}{1.5/{$\sigma$/pair,/pair,/pair},10/{$\sigma^*$/,/,/}}{2.0/{,,,,,}}%t1u
+    \overlapp{5.0/{3d/,/,/,/,/}}{1.0/{$\pi$/pair,/},6.5/{$\pi^*$/,/}}{2.0/{,,,,,}}%eg
+    \def\electroncolor{red}
+    \overlapp{5.0/{,,,,}}{5.0/{$t_{2g}$/pair,/,/}}{}%t2g
+
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \initdiagram
+    \def\columndistance{3}
+
+    \def\diagrammode{compact}
+    \def\electroncolor{red}
+    \overlapp{-0.5/{2s/leer},2/{2p/leer,2p/leer,2p/leer}}{-3/{$\sigma$/pair},6/{$\sigma^*$/leer},1/{/pair}}{3/{LGO/pair,LGO/pair}}%a1
+    \overlapp{2/{,,}}{4/{$\pi^*$/leer},-1/{$\pi$/pair}}{3/{,}}%b1
+    \overlapp{2/{,,}}{2/{nb/leer}}{}%b2
+
+    \addlabel{Sauerstoff,MO,Wasserstoff}{0}
+    \addenergyscale{0}
+    \showenergydifference{1,2}{middle}{1}{$\Delta_O$}
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+    \initdiagram
+    \def\diagrammode{compact}
+    \degenerate{4}{gfys/up,/empty}{left}
+    \degenerate{5}{fck/empty}{left}
+    \degenerate{0}{text/empty}{middle}
+    \degenerate{0}{text/empty}{right}
+    \connectorbital{4}{2}{0}{1}{left}
+    \connectorbital{0}{1}{0}{1}{right}
+\end{tikzpicture}
+
+\end{document}
