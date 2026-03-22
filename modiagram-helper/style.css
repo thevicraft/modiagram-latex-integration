@@ -1,0 +1,294 @@
+h1 {
+    margin-top: 0;
+    padding-top: 10px;
+    /* Optional: Ein kleiner kontrollierter Abstand sieht meist besser aus */
+    position: relative;
+
+    font-family: "Raleway", sans-serif;
+    font-weight: 300;
+    font-size: 40px;
+    color: #080808;
+    -webkit-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+
+h3 {
+    margin-top: 0;
+    padding-top: 10px;
+    /* Optional: Ein kleiner kontrollierter Abstand sieht meist besser aus */
+    position: relative;
+
+    font-family: "Raleway", sans-serif;
+    font-weight: 300;
+    font-size: 14pt;
+    color: #080808;
+    -webkit-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+
+h3 input {
+    color: blue;
+    vertical-align: middle;
+    border: 1px solid #0086e0;
+    outline: none;
+    width: 70px;
+}
+
+body {
+    font-family: sans-serif;
+    /* padding: 20px; */
+    gap: 20px;
+}
+
+.input-area {
+    width: 40%;
+}
+
+.output-area {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+}
+
+.output-area #diagram-settings {
+    width: 20%;
+    box-sizing: border-box;
+}
+
+.output-area .preview-container {
+    padding: 0;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    /* Horizontale Zentrierung */
+    align-items: center;
+    /* Vertikale Zentrierung */
+    flex: 1;
+}
+
+.output-area .preview-container #mo-preview {
+    width: 60%;
+    background-color: white;
+}
+
+textarea {
+    width: 100%;
+    height: 300px;
+    font-family: monospace;
+    background: #f4f4f4;
+}
+
+
+table {
+    border-collapse: collapse;
+    font-size: 12px;
+    /* Kleinere Schrift */
+}
+
+/* Die Drehung der Header */
+th {
+    color: #4CAF50;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+
+    text-align: left;
+    vertical-align: middle;
+
+    padding: 10px;
+    border: 1px solid #ccc;
+
+    width: auto;
+}
+
+/* 
+        th div {
+            transform: rotate(-90deg);
+            width: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        }
+
+        */
+
+/* Eingabefelder extrem verkleinern */
+td {
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+td input {
+    border: none;
+    padding: 2px;
+    font-size: 12px;
+    outline: none;
+}
+
+/* Spezifische Breiten für die Typen */
+td input[type="number"] {
+    /* width: 40px; */
+    border: 1px solid #00e038;
+}
+
+.degeneration {
+    width: 30px;
+}
+
+.energy {
+    width: 40px;
+}
+
+.electrons {
+    width: 30px;
+}
+
+
+td input[type="text"] {
+    width: 60px;
+    border: 1px solid #00e038;
+}
+
+#mo-preview {
+    width: 100%;
+    height: 400px;
+    /* Feste Anzeigehöhe */
+    background-color: #f9f9f9;
+    border: 1px dashed #aaa;
+
+    /* WICHTIG: Spiegelt die Y-Achse, damit höhere Energie oben ist */
+    transform: scaleY(-1);
+}
+
+#mo-preview line {
+    stroke-width: 2px;
+    /* Jetzt in Pixeln messbar! */
+    vector-effect: non-scaling-stroke;
+}
+
+#mo-preview image {
+    transform: scale(0.2, -0.2);
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.orbital_line {
+    stroke: black;
+}
+
+.energy_scale_line {
+    stroke: black;
+}
+
+.energy_scale_tip {
+    stroke-width: 200%;
+    stroke: black;
+}
+
+.orbital_connection_line {
+    stroke: #888888;
+    stroke-dasharray: 5, 4;
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+}
+
+.electron_normal {
+    stroke: black;
+    stroke-width: 0.5px;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.electron_compact {
+    stroke: rgb(255, 0, 0);
+    stroke-width: 0.1px;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.orbital_label {
+    font-size: 0.3px;
+    text-anchor: middle;
+    fill: black;
+    transform: scale(1, -1);
+    transform-origin: center;
+    transform-box: fill-box;
+    padding-bottom: 1px;
+}
+
+#unsaved_notifier {
+    color: red;
+}
+
+.remove_orbital {
+    /* color: white;
+    background-color: red;
+    border-style: none;
+    vertical-align: center; */
+    /* position: relative; */
+    background-color: #EA4C89;
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: sans-serif;
+    font-size: 8px;
+    font-weight: 500;
+    height: auto;
+    line-height: 50%;
+    list-style: none;
+    margin: 0;
+    outline: none;
+    padding: 150% 150%;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.remove_orbital:hover {
+    filter: brightness(150%);
+    -webkit-filter: brightness(150%);
+}
+
+.add_orbital {
+    background-color: #4cea74;
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    height: 20px;
+    line-height: 10px;
+    list-style: none;
+    margin: 0;
+    outline: none;
+    /* padding: 10px 16px; */
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.add_orbital:hover {
+    filter: brightness(150%);
+    -webkit-filter: brightness(150%);
+}
