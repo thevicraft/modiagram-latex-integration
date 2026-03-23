@@ -8,6 +8,7 @@ let energy_scale = false;
 
 let disable_mathjax = false;
 
+let dark_mode = true;
 
 
 
@@ -30,7 +31,7 @@ function addInputArea(name) {
     const div = document.createElement('div');
     div.className = 'input-area';
     div.innerHTML = `
-            <table id="orbitals_${name}">
+            <table class="nice_box" id="orbitals_${name}">
                 <h3>${titles[name]}<input type="text" id="column_label_${name}" onchange="${onchange}" value=""></h3>
                 <tr>
                     <th>Energy</th>

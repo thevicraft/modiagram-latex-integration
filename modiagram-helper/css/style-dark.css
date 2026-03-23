@@ -1,0 +1,96 @@
+h3 input {
+    color: rgb(180, 180, 230);
+    background-color: #2c2c2c;
+}
+
+body {
+    color: rgb(209, 209, 209);
+    background-image: url('https://wallpapercave.com/wp/wp7449676.jpg');
+}
+
+textarea {
+    background: #f4f4f4;
+}
+
+
+/* Die Drehung der Header */
+th {
+    color: #2ac8dd;
+    border: 1px solid #ccc;
+}
+
+td {
+    border: 1px solid #ccc;
+}
+
+td input {
+    background-color: #2c2c2c;
+}
+
+td input[type="number"] {
+    color: #83af87;
+}
+
+td input[type="text"] {
+    color: #bd9b70;
+}
+
+#mo-preview {
+    border: 1px thick #aaa;
+    background-color: #2c2c2cce;
+
+}
+
+#mo-preview line {
+    stroke-width: 2px;
+    stroke-color: white;
+    /* Jetzt in Pixeln messbar! */
+    vector-effect: non-scaling-stroke;
+}
+
+#mo-preview image {
+    filter: invert(1);
+}
+
+.orbital_line {
+    stroke: rgb(255, 255, 255);
+}
+
+.energy_scale_line {
+    stroke: rgb(179, 179, 179);
+}
+
+.energy_scale_tip {
+    stroke: rgb(179, 179, 179);
+}
+
+.orbital_connection_line {
+    stroke: #c5c5c5;
+}
+
+.electron_normal {
+    stroke: rgb(255, 226, 226);
+}
+
+.electron_compact {
+    stroke: rgb(255, 127, 127);
+}
+
+.orbital_label {
+    fill: rgb(148, 148, 148);
+}
+
+#unsaved_notifier {
+    color: red;
+}
+
+.remove_orbital {
+    background-color: #EA4C89;
+    color: #FFFFFF;
+}
+
+
+.add_orbital {
+    background-color: #4cea74;
+    color: #ffffff;
+}

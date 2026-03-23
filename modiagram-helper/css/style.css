@@ -7,7 +7,6 @@ h1 {
     font-family: "Raleway", sans-serif;
     font-weight: 300;
     font-size: 40px;
-    color: #080808;
     -webkit-transition: all 0.4s ease 0s;
     -o-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
@@ -22,24 +21,26 @@ h3 {
     font-family: "Raleway", sans-serif;
     font-weight: 300;
     font-size: 14pt;
-    color: #080808;
     -webkit-transition: all 0.4s ease 0s;
     -o-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
 }
 
 h3 input {
-    color: blue;
     vertical-align: middle;
-    border: 1px solid #0086e0;
     outline: none;
-    width: 70px;
+    width: 80px;
 }
 
 body {
     font-family: sans-serif;
-    /* padding: 20px; */
-    gap: 20px;
+    font-size: 14pt;
+    padding: 10px;
+    gap: 0px;
+    /* background-image: url('https://wallpapercave.com/wp/wp7449676.jpg'); */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 .input-area {
@@ -68,37 +69,32 @@ body {
     flex: 1;
 }
 
-.output-area .preview-container #mo-preview {
+/* .output-area .preview-container #mo-preview {
     width: 60%;
     background-color: white;
-}
+} */
 
 textarea {
     width: 100%;
     height: 300px;
     font-family: monospace;
-    background: #f4f4f4;
 }
 
 
 table {
-    border-collapse: collapse;
-    font-size: 12px;
+    font-size: 13pt;
     /* Kleinere Schrift */
 }
 
 /* Die Drehung der Header */
 th {
-    color: #4CAF50;
     writing-mode: vertical-rl;
     transform: rotate(180deg);
 
     text-align: left;
     vertical-align: middle;
-
+    font-size: 13pt;
     padding: 10px;
-    border: 1px solid #ccc;
-
     width: auto;
 }
 
@@ -114,22 +110,15 @@ th {
 
 /* Eingabefelder extrem verkleinern */
 td {
-    border: 1px solid #ccc;
     text-align: center;
 }
 
 td input {
     border: none;
-    padding: 2px;
-    font-size: 12px;
+    /* padding: 2px; */
     outline: none;
 }
 
-/* Spezifische Breiten für die Typen */
-td input[type="number"] {
-    /* width: 40px; */
-    border: 1px solid #00e038;
-}
 
 .degeneration {
     width: 30px;
@@ -146,15 +135,11 @@ td input[type="number"] {
 
 td input[type="text"] {
     width: 60px;
-    border: 1px solid #00e038;
 }
 
 #mo-preview {
-    width: 100%;
+    width: 60%;
     height: 400px;
-    /* Feste Anzeigehöhe */
-    background-color: #f9f9f9;
-    border: 1px dashed #aaa;
 
     /* WICHTIG: Spiegelt die Y-Achse, damit höhere Energie oben ist */
     transform: scaleY(-1);
@@ -172,28 +157,19 @@ td input[type="text"] {
     transform-origin: center;
 }
 
-.orbital_line {
-    stroke: black;
-}
-
-.energy_scale_line {
-    stroke: black;
-}
-
 .energy_scale_tip {
     stroke-width: 200%;
-    stroke: black;
 }
 
 .orbital_connection_line {
-    stroke: #888888;
+    /* stroke: #888888; */
     stroke-dasharray: 5, 4;
     stroke-width: 1px;
     vector-effect: non-scaling-stroke;
 }
 
 .electron_normal {
-    stroke: black;
+    /* stroke: black; */
     stroke-width: 0.5px;
     fill: none;
     stroke-linecap: round;
@@ -202,7 +178,7 @@ td input[type="text"] {
 }
 
 .electron_compact {
-    stroke: rgb(255, 0, 0);
+    /* stroke: rgb(255, 0, 0); */
     stroke-width: 0.1px;
     fill: none;
     stroke-linecap: round;
@@ -213,16 +189,13 @@ td input[type="text"] {
 .orbital_label {
     font-size: 0.3px;
     text-anchor: middle;
-    fill: black;
+    /* fill: black; */
     transform: scale(1, -1);
     transform-origin: center;
     transform-box: fill-box;
     padding-bottom: 1px;
 }
 
-#unsaved_notifier {
-    color: red;
-}
 
 .remove_orbital {
     /* color: white;
@@ -230,11 +203,9 @@ td input[type="text"] {
     border-style: none;
     vertical-align: center; */
     /* position: relative; */
-    background-color: #EA4C89;
     border-radius: 8px;
     border-style: none;
     box-sizing: border-box;
-    color: #FFFFFF;
     cursor: pointer;
     display: inline-block;
     font-family: sans-serif;
@@ -262,11 +233,9 @@ td input[type="text"] {
 }
 
 .add_orbital {
-    background-color: #4cea74;
     border-radius: 8px;
     border-style: none;
     box-sizing: border-box;
-    color: #FFFFFF;
     cursor: pointer;
     display: inline-block;
     font-family: sans-serif;
