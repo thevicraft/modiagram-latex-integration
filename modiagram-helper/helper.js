@@ -6,6 +6,8 @@ let column_width = 3;
 let compact = false;
 let energy_scale = false;
 
+let disable_mathjax = false;
+
 
 
 
@@ -172,15 +174,24 @@ function evaluateIt() {
                 // add label
                 if (compact && (single === 0)) {
 
-                    preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[0]}</text>`;
+                    // preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[0]}</text>`;
+
+                    const trick = namesArray[single].split('$');
+                    if (!disable_mathjax && trick.length > 2) {
+                        const g = getImageURL(trick[1]);
+                        preview += `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
+                    } else {
+                        preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[single]}</text>`;
+                    }
 
                 } else if (!compact && (single < namesArray.length)) {
-                    // preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[single]}</text>`;
-                    // preview += `<image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyLjI4ZXgiIGhlaWdodD0iMS4zMTRleCIgcm9sZT0iaW1nIiBmb2N1c2FibGU9ImZhbHNlIiB2aWV3Qm94PSIwIC00MzEgMTAwNy42IDU4MSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIGFyaWEtaGlkZGVuPSJ0cnVlIiBzdHlsZT0idmVydGljYWwtYWxpZ246IC0wLjMzOWV4OyI+PGRlZnM+PHBhdGggaWQ9Ik1KWC0yLVRFWC1JLTFENzBFIiBkPSJNMTg0IC0xMVExMTYgLTExIDc0IDM0VDMxIDE0N1EzMSAyNDcgMTA0IDMzM1QyNzQgNDMwUTI3NSA0MzEgNDE0IDQzMUg1NTJRNTUzIDQzMCA1NTUgNDI5VDU1OSA0MjdUNTYyIDQyNVQ1NjUgNDIyVDU2NyA0MjBUNTY5IDQxNlQ1NzAgNDEyVDU3MSA0MDdUNTcyIDQwMVE1NzIgMzU3IDUwNyAzNTdRNTAwIDM1NyA0OTAgMzU3VDQ3NiAzNThINDE2TDQyMSAzNDhRNDM5IDMxMCA0MzkgMjYzUTQzOSAxNTMgMzU5IDcxVDE4NCAtMTFaTTM2MSAyNzhRMzYxIDM1OCAyNzYgMzU4UTE1MiAzNTggMTE1IDE4NFExMTQgMTgwIDExNCAxNzhRMTA2IDE0MSAxMDYgMTE3UTEwNiA2NyAxMzEgNDdUMTg4IDI2UTI0MiAyNiAyODcgNzNRMzE2IDEwMyAzMzQgMTUzVDM1NiAyMzNUMzYxIDI3OFoiLz48cGF0aCBpZD0iTUpYLTItVEVYLU4tMzIiIGQ9Ik0xMDkgNDI5UTgyIDQyOSA2NiA0NDdUNTAgNDkxUTUwIDU2MiAxMDMgNjE0VDIzNSA2NjZRMzI2IDY2NiAzODcgNjEwVDQ0OSA0NjVRNDQ5IDQyMiA0MjkgMzgzVDM4MSAzMTVUMzAxIDI0MVEyNjUgMjEwIDIwMSAxNDlMMTQyIDkzTDIxOCA5MlEzNzUgOTIgMzg1IDk3UTM5MiA5OSA0MDkgMTg2VjE4OUg0NDlWMTg2UTQ0OCAxODMgNDM2IDk1VDQyMSAzVjBINTBWMTlWMzFRNTAgMzggNTYgNDZUODYgODFRMTE1IDExMyAxMzYgMTM3UTE0NSAxNDcgMTcwIDE3NFQyMDQgMjExVDIzMyAyNDRUMjYxIDI3OFQyODQgMzA4VDMwNSAzNDBUMzIwIDM2OVQzMzMgNDAxVDM0MCA0MzFUMzQzIDQ2NFEzNDMgNTI3IDMwOSA1NzNUMjEyIDYxOVExNzkgNjE5IDE1NCA2MDJUMTE5IDU2OVQxMDkgNTUwUTEwOSA1NDkgMTE0IDU0OVExMzIgNTQ5IDE1MSA1MzVUMTcwIDQ4OVExNzAgNDY0IDE1NCA0NDdUMTA5IDQyOVoiLz48L2RlZnM+PGcgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIGZpbGw9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIwIiB0cmFuc2Zvcm09InNjYWxlKDEsLTEpIj48ZyBkYXRhLW1tbC1ub2RlPSJtYXRoIj48ZyBkYXRhLW1tbC1ub2RlPSJtc3ViIj48ZyBkYXRhLW1tbC1ub2RlPSJtaSI+PHVzZSBkYXRhLWM9IjFENzBFIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeGxpbms6aHJlZj0iI01KWC0yLVRFWC1JLTFENzBFIi8+PC9nPjxnIGRhdGEtbW1sLW5vZGU9Im1uIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2MDQsLTE1MCkgc2NhbGUoMC43MDcpIj48dXNlIGRhdGEtYz0iMzIiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bGluazpocmVmPSIjTUpYLTItVEVYLU4tMzIiLz48L2c+PC9nPjwvZz48L2c+PC9zdmc+" x="${xpos}" y="${ypos - 0.8}" width="1" height="1"/>`;
-                    const g = getImageURL(namesArray[single]);
-                    // preview += `<image href="${g[0]}" preserveAspectRatio="xMidYMid meet" x="${xpos + orbital_width / 2 - 2}" y="${ypos - 1}" width="4" height="1"/>`;
-                    console.log(namesArray[single], g.w, g.h);
-                    preview += `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
+                    const trick = namesArray[single].split('$');
+                    if (!disable_mathjax && trick.length > 2) {
+                        const g = getImageURL(trick[1]);
+                        preview += `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
+                    } else {
+                        preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[single]}</text>`;
+                    }
                 }
 
                 minX = Math.min(minX, xpos);
@@ -413,6 +424,10 @@ document.getElementById('compact').addEventListener('change', function () {
 });
 document.getElementById('add_energy_scale').addEventListener('change', function () {
     energy_scale = this.checked;
+    evaluateIt();
+});
+document.getElementById('disable_mathjax').addEventListener('change', function () {
+    disable_mathjax = this.checked;
     evaluateIt();
 });
 
