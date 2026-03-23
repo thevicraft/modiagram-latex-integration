@@ -101,19 +101,29 @@ function evaluateIt() {
     addsymmetry(values_middle);
     addsymmetry(values_right);
 
+    function getPreviewLabelHTMLElement(text, xpos, ypos) {
+        function getImageURL(latex) {
+            const formulaContainer = MathJax.tex2svg(latex);
+            const svgElement = formulaContainer.querySelector("svg");
+
+            // 1. SVG zu einem String machen und Base64 kodieren
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const svgBase64 = btoa(unescape(encodeURIComponent(svgData)));
+            const dataUrl = "data:image/svg+xml;base64," + svgBase64;
+
+            return { url: dataUrl, w: parseFloat(svgElement.getAttribute("width")), h: parseFloat(svgElement.getAttribute("height")) };
+        }
+        const trick = text.split('$');
+        if (!disable_mathjax && trick.length > 2) {
+            const g = getImageURL(trick[1]);
+            return `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
+        }
+        return preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${text}</text>`;
+
+    }
+
     function drawOrbital(list, elecs, side) {
         function drawPreview(energy, electrons, side, names) {
-            function getImageURL(latex) {
-                const formulaContainer = MathJax.tex2svg(latex);
-                const svgElement = formulaContainer.querySelector("svg");
-
-                // 1. SVG zu einem String machen und Base64 kodieren
-                const svgData = new XMLSerializer().serializeToString(svgElement);
-                const svgBase64 = btoa(unescape(encodeURIComponent(svgData)));
-                const dataUrl = "data:image/svg+xml;base64," + svgBase64;
-
-                return { url: dataUrl, w: parseFloat(svgElement.getAttribute("width")), h: parseFloat(svgElement.getAttribute("height")) };
-            }
             function getElectronSVG(x, y, type) {
                 mode = 'normal';
                 h = 0.5; // Höhe des Pfeils
@@ -176,22 +186,24 @@ function evaluateIt() {
 
                     // preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[0]}</text>`;
 
-                    const trick = namesArray[single].split('$');
-                    if (!disable_mathjax && trick.length > 2) {
-                        const g = getImageURL(trick[1]);
-                        preview += `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
-                    } else {
-                        preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[single]}</text>`;
-                    }
+                    // const trick = namesArray[single].split('$');
+                    // if (!disable_mathjax && trick.length > 2) {
+                    //     const g = getImageURL(trick[1]);
+                    //     preview += `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
+                    // } else {
+                    //     preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[single]}</text>`;
+                    // }
+                    preview += getPreviewLabelHTMLElement(namesArray[single], xpos, ypos);
 
                 } else if (!compact && (single < namesArray.length)) {
-                    const trick = namesArray[single].split('$');
-                    if (!disable_mathjax && trick.length > 2) {
-                        const g = getImageURL(trick[1]);
-                        preview += `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
-                    } else {
-                        preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[single]}</text>`;
-                    }
+                    // const trick = namesArray[single].split('$');
+                    // if (!disable_mathjax && trick.length > 2) {
+                    //     const g = getImageURL(trick[1]);
+                    //     preview += `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
+                    // } else {
+                    //     preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[single]}</text>`;
+                    // }
+                    preview += getPreviewLabelHTMLElement(namesArray[single], xpos, ypos);
                 }
 
                 minX = Math.min(minX, xpos);
@@ -483,7 +495,7 @@ function loadFromCache() {
         i.remove();
     });
     Object.keys(cache).forEach(name => {
-        console.log('Found ' + name);
+        console.log('Loading from cache: ' + name);
         const option = document.createElement('option');
         option.value = name;      // Der interne Wert (Key)
         option.textContent = name; // Der Text, den der User sieht
