@@ -31,7 +31,7 @@ function addInputArea(name) {
     div.className = 'input-area';
     div.innerHTML = `
             <table id="orbitals_${name}">
-                <h3>${titles[name]}<input type="text" class="column_label_${name}" onchange="${onchange}" value=""></h3>
+                <h3>${titles[name]}<input type="text" id="column_label_${name}" onchange="${onchange}" value=""></h3>
                 <tr>
                     <th>Energy</th>
                     <th>Symmetry Group</th>
@@ -119,7 +119,6 @@ function evaluateIt() {
             return `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
         }
         return preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${text}</text>`;
-
     }
 
     function drawOrbital(list, elecs, side) {
@@ -292,6 +291,19 @@ function evaluateIt() {
     });
 
 
+    {// labels have to be set here!! otherwise minY... are not set properly as they are calculated during orbital drawing!!
+        const textL = document.getElementById('column_label_left').value.trim();
+        const textM = document.getElementById('column_label_middle').value.trim();
+        const textR = document.getElementById('column_label_right').value.trim();
+        if (textL.length > 0 || textM.length > 0 || textR.length > 0) {
+            code += `\t\\addlabel{${textL},${textM},${textR}}{0}\n`;
+            preview += getPreviewLabelHTMLElement(textL, 0, minY - 0.7);
+            preview += getPreviewLabelHTMLElement(textM, (column_width + orbital_width), minY - 0.7);
+            preview += getPreviewLabelHTMLElement(textR, (column_width + orbital_width) * 2, minY - 0.7);
+        }
+    }
+
+
     if (energy_scale) {
         code += '\t\\addenergyscale{0}\n';
     }
@@ -335,6 +347,10 @@ function extractGUIFromData(data) {
     compact = data.compact;
     document.getElementById('add_energy_scale').checked = data.energy_scale;
     energy_scale = data.energy_scale;
+
+    document.getElementById('column_label_left').value = data.column_label_left;
+    document.getElementById('column_label_middle').value = data.column_label_middle;
+    document.getElementById('column_label_right').value = data.column_label_right;
 }
 
 
@@ -385,7 +401,10 @@ function getCurrentData() {
         'middle': Array.from(values_middle),
         'right': Array.from(values_right),
         'compact': compact,
-        'energy_scale': energy_scale
+        'energy_scale': energy_scale,
+        'column_label_left': document.getElementById('column_label_left').value,
+        'column_label_middle': document.getElementById('column_label_middle').value,
+        'column_label_right': document.getElementById('column_label_right').value
     };
     return newarray;
 }
@@ -395,7 +414,10 @@ function getEmptyData() {
         'middle': [],
         'right': [],
         'compact': false,
-        'energy_scale': false
+        'energy_scale': false,
+        'column_label_left': '',
+        'column_label_middle': '',
+        'column_label_right': ''
     };
     return newarray;
 }
