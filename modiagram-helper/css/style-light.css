@@ -1,8 +1,20 @@
 body {
     color: rgb(243, 255, 177);
-    text-shadow: 2px 2px #000000;
+    /* text-shadow: 2px 2px #000000; */
     background-image: url('https://wallpapercave.com/wp/wp4124034.jpg');
     background-attachment: fixed;
+}
+
+#dreispalten {
+    background-color: #d8d8d848;
+    border-radius: 50px;
+}
+
+h1 {
+    background-color: #d8d8d848;
+    border-radius: 50px;
+    text-align: center;
+    text-shadow: 5px 5px #000000;
 }
 
 h3 input {
