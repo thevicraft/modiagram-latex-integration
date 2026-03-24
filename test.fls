@@ -45,9 +45,9 @@ INPUT C:\Users\v9alt\AppData\Local\Programs\MiKTeX\tex\latex\graphics-cfg\color.
 INPUT C:\Users\v9alt\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
 INPUT C:\Users\v9alt\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
 INPUT C:\Users\v9alt\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
-INPUT .\lib\orbitals.tex
-INPUT .\lib\orbitals.tex
-INPUT lib\orbitals.tex
+INPUT .\lib\modiagram-latex-integration.sty
+INPUT .\lib\modiagram-latex-integration.sty
+INPUT lib\modiagram-latex-integration.sty
 INPUT C:\Users\v9alt\AppData\Local\Programs\MiKTeX\tex\latex\pgf\frontendlayer\tikz.sty
 INPUT C:\Users\v9alt\AppData\Local\Programs\MiKTeX\tex\latex\pgf\frontendlayer\tikz.sty
 INPUT C:\Users\v9alt\AppData\Local\Programs\MiKTeX\tex\latex\pgf\basiclayer\pgf.sty

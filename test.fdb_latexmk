@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1774273356.02608 "c:/Users/v9alt/OneDrive - JGU/Visual Studio Code/modiagram-latex-integration/test.tex" "test.pdf" "test" 1774273358.73251 0
+["pdflatex"] 1774388802.81112 "c:/Users/v9alt/OneDrive - JGU/Visual Studio Code/modiagram-latex-integration/test.tex" "test.pdf" "test" 1774388806.04785 0
   "C:/Users/v9alt/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1773763745 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/v9alt/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1728.pk" 1773508176 49100 a1f4b0d154aec8f0f1ac53f8fced9489 ""
   "C:/Users/v9alt/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecrm0800.pk" 1773597525 19080 f00a7c2f281f7ce9f0d94d4d202a43a5 ""
@@ -122,11 +122,11 @@
   "C:/Users/v9alt/AppData/Local/Programs/MiKTeX/tex/latex/pgf/utilities/pgfrcs.sty" 1756451144 325 f9f16d12354225b7dd52a3321f085955 ""
   "C:/Users/v9alt/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "C:/Users/v9alt/AppData/Local/Programs/MiKTeX/tex/latex/xstring/xstring.sty" 1693735632 123 a302f2c651a95033260db60e51527ae8 ""
-  "c:/Users/v9alt/OneDrive - JGU/Visual Studio Code/modiagram-latex-integration/test.tex" 1774273354 2514 0e6ec502d1aa818f0818f7e4b73f0046 ""
-  "lib/orbitals.tex" 1774040750 15680 7877ddf9aecb36253524fb5f1bc28504 ""
-  "test.aux" 1774273358 237 a69fc7979245bc77cb692b0cebad415f "pdflatex"
-  "test.lof" 1774273357 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "test.tex" 1774273354 2514 0e6ec502d1aa818f0818f7e4b73f0046 ""
+  "c:/Users/v9alt/OneDrive - JGU/Visual Studio Code/modiagram-latex-integration/test.tex" 1774388799 2683 2b29fe88ad2fd8021e7ca46516180d16 ""
+  "lib/modiagram-latex-integration.sty" 1774388801 15778 af0f5e60a7b6239a106dc77343a59e92 ""
+  "test.aux" 1774388805 237 a69fc7979245bc77cb692b0cebad415f "pdflatex"
+  "test.lof" 1774388804 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "test.tex" 1774388799 2683 2b29fe88ad2fd8021e7ca46516180d16 ""
   (generated)
   "test.aux"
   "test.lof"
