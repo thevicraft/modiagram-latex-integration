@@ -1,19 +1,13 @@
 body {
     color: rgb(243, 255, 177);
-    /* text-shadow: 2px 2px #000000; */
-    background-image: url('https://wallpapercave.com/wp/wp4124034.jpg');
-    background-attachment: fixed;
 }
 
 #dreispalten {
     background-color: #d8d8d848;
-    border-radius: 50px;
 }
 
 h1 {
     background-color: #d8d8d848;
-    border-radius: 50px;
-    text-align: center;
     text-shadow: 5px 5px #000000;
 }
 
@@ -27,32 +21,19 @@ textarea {
 }
 
 .nice_box {
-    border-radius: 25px;
-    border: 2px solid #f8f55b;
+    border-color: #f8f55b;
     background-color: #e4af00c4;
 }
 
-/* Die Drehung der Header */
 th {
     text-shadow: 2px 2px #3b3b3b;
     color: #fffebf;
-    /* background-color: #8f8f8f85; */
-    border-top: 2px solid #6e531f;
+    border-top-color: #6e531f;
 }
-
-/* tr:nth-child(even) {
-    background-color: #e9cb67;
-} */
-
-
-/* td {
-    border: 1px solid #ccc;
-} */
 
 td input {
     background-color: #c9c61bda;
-    border-radius: 5px;
-    border: 1px solid #f8f55b;
+    border-color: #f8f55b;
 }
 
 td input[type="number"] {
@@ -60,21 +41,18 @@ td input[type="number"] {
 }
 
 td input[type="text"] {
-    color: #4b3e2d;
+    color: #a3418e;
+    border-color: #b15bf8;
 }
 
 #mo-preview {
-    border-radius: 25px;
-    border: 2px solid #797979;
+    border-color: #797979;
     background-color: #e0e0e0de;
 
 }
 
 #mo-preview line {
-    stroke-width: 2px;
     stroke-color: rgb(0, 0, 0);
-    /* Jetzt in Pixeln messbar! */
-    vector-effect: non-scaling-stroke;
 }
 
 /* #mo-preview image {

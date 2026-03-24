@@ -8,7 +8,7 @@ let energy_scale = false;
 
 let disable_mathjax = false;
 
-let dark_mode = true;
+let dark_mode = false;
 
 
 
@@ -19,6 +19,17 @@ var minY = 100;
 var maxY = -100;
 
 let cache = {};
+
+function switchTheme() {
+    dark_mode = !dark_mode;
+    const themeLink = document.getElementById('theme-link');
+    if (dark_mode) {
+        themeLink.href = './css/style-dark.css';
+        return;
+    }
+    themeLink.href = './css/style-light.css';
+    return;
+}
 
 const onchange = 'evaluateIt();';
 
