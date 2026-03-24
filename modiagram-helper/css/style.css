@@ -18,6 +18,10 @@ h1 {
     backdrop-filter: blur(2px);
 }
 
+.file-controls :nth-child {
+    vertical-align: middle;
+}
+
 h3 {
     margin-top: 0;
     padding-top: 10px;
@@ -220,6 +224,22 @@ td input[type="text"] {
     border-radius: 15px;
     border: none;
     padding: 3px;
+}
+
+#theme_switch {
+    border-radius: 15px;
+    border: none;
+    padding: 3px;
+    height: auto;
+    width: 22pt;
+    font-size: 14pt;
+    text-align: center;
+    align-self: right;
+    color: rgb(43, 72, 134);
+}
+
+#theme_switch:hover {
+    color: black;
 }
 
 .remove_orbital {

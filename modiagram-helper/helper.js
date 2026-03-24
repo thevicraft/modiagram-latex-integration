@@ -25,9 +25,11 @@ function switchTheme() {
     const themeLink = document.getElementById('theme-link');
     if (dark_mode) {
         themeLink.href = './css/style-dark.css';
+        document.getElementById('theme_switch').textContent = '\u2600';
         return;
     }
     themeLink.href = './css/style-light.css';
+    document.getElementById('theme_switch').textContent = '\u263D';
     return;
 }
 
@@ -45,11 +47,11 @@ function addInputArea(name) {
             <table class="nice_box" id="orbitals_${name}">
                 <h3>${titles[name]}<input type="text" id="column_label_${name}" onchange="${onchange}" value=""></h3>
                 <tr>
-                    <th>$h\\nu$</th>
-                    <th>$\\Gamma$</th>
-                    <th>$g_i$</th>
-                    <th>$\\upharpoonleft\\downharpoonright $</th>
-                    <th>label</th>
+                    <th title="Energy (position on energy scale -> 1cm/unit)">$h\\nu$</th>
+                    <th title="Symmetry Group (Irreducible Representation)">$\\Gamma$</th>
+                    <th title="Degeneration (number of orbitals having same energy)">$g_i$</th>
+                    <th title="Electrons">$\\upharpoonleft\\downharpoonright $</th>
+                    <th title="Labels (separate by komma for degenerated orbitals)">label</th>
                 </tr>
             </table>
             <button class="add_orbital" onclick="addOrbital('`+ name + `', 0, 'a1', 1, 0, '');${onchange}">+</button>`;
