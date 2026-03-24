@@ -4,6 +4,7 @@ body {
 
 #dreispalten {
     background-color: #d8d8d848;
+    /* backdrop-filter: blur(2px); */
 }
 
 h1 {
@@ -26,9 +27,9 @@ textarea {
 }
 
 th {
-    text-shadow: 2px 2px #3b3b3b;
-    color: #fffebf;
-    border-top-color: #6e531f;
+    /* text-shadow: 2px 2px #3b3b3b; */
+    color: #fcfbe3;
+    border-bottom-color: #6e531f;
 }
 
 td input {
@@ -90,6 +91,7 @@ td input[type="text"] {
 
 #unsaved_notifier {
     color: red;
+    background-color: #a34172ce;
 }
 
 .remove_orbital {

@@ -45,11 +45,11 @@ function addInputArea(name) {
             <table class="nice_box" id="orbitals_${name}">
                 <h3>${titles[name]}<input type="text" id="column_label_${name}" onchange="${onchange}" value=""></h3>
                 <tr>
-                    <th>Energy</th>
-                    <th>Symmetry Group</th>
-                    <th>Degeneration</th>
-                    <th>Electrons</th>
-                    <th>Label</th>
+                    <th>$h\\nu$</th>
+                    <th>$\\Gamma$</th>
+                    <th>$g_i$</th>
+                    <th>$\\upharpoonleft\\downharpoonright $</th>
+                    <th>label</th>
                 </tr>
             </table>
             <button class="add_orbital" onclick="addOrbital('`+ name + `', 0, 'a1', 1, 0, '');${onchange}">+</button>`;
@@ -555,6 +555,9 @@ function changeProject(name, data) {
     addInputArea('right');
     extractGUIFromData(data);
     evaluateIt();
+    if (MathJax) {
+        MathJax.typeset();
+    }
 }
 
 function saveProject() {

@@ -36,6 +36,9 @@ h3 input {
     vertical-align: middle;
     outline: none;
     width: 80px;
+    font-size: 13pt;
+    border-radius: 5px;
+    border: 1px solid;
 }
 
 body {
@@ -52,6 +55,10 @@ body {
 
     background-image: url('../data/background-image.png');
     background-attachment: fixed;
+}
+
+br {
+    height: 1px;
 }
 
 .nice_box {
@@ -94,11 +101,6 @@ body {
     flex: 1;
 }
 
-/* .output-area .preview-container #mo-preview {
-    width: 60%;
-    background-color: white;
-} */
-
 textarea {
     width: 100%;
     box-sizing: border-box;
@@ -109,39 +111,27 @@ textarea {
 
 table {
     font-size: 13pt;
-    /* Kleinere Schrift */
 }
 
 /* Die Drehung der Header */
 th {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-
-    text-align: left;
-    vertical-align: middle;
-    font-size: 13pt;
+    /* writing-mode: vertical-rl; */
+    /* transform: rotate(180deg); */
+    font-family: 'Times New Roman', Times, serif;
+    text-align: middle;
+    /* vertical-align: middle; */
+    font-weight: 1;
+    font-size: 15pt;
     padding: 10px;
     width: auto;
-    border-top: 2px solid;
+    border-bottom: 2px solid;
 }
 
-/* 
-        th div {
-            transform: rotate(-90deg);
-            width: 20px;
-        margin-left: auto;
-        margin-right: auto;
-        }
-
-        */
-
-/* Eingabefelder extrem verkleinern */
 td {
     text-align: center;
 }
 
 td input {
-    border: none;
     outline: none;
     border-radius: 5px;
     border: 1px solid;
@@ -226,6 +216,11 @@ td input[type="text"] {
     padding-bottom: 1px;
 }
 
+#unsaved_notifier {
+    border-radius: 15px;
+    border: none;
+    padding: 3px;
+}
 
 .remove_orbital {
     /* color: white;

@@ -1,6 +1,12 @@
 body {
     color: rgb(209, 209, 209);
-    backdrop-filter: invert(1) brightness(20%);
+    backdrop-filter:
+        /*invert(1)*/
+        brightness(20%);
+}
+
+.file-controls {
+    filter: invert(1);
 }
 
 #dreispalten {
@@ -26,12 +32,12 @@ textarea {
 
 .nice_box {
     border-color: #c2c2c2;
-    background-color: #a0977bc4;
+    background-color: #363636c4;
 }
 
 th {
-    color: #2ac8dd;
-    border-top-color: rgb(95, 95, 95);
+    color: #2ab3dd;
+    border-bottom-color: rgb(95, 95, 95);
 }
 
 td input {
@@ -90,6 +96,7 @@ td input[type="text"] {
 }
 
 #unsaved_notifier {
+    filter: invert(1);
     color: red;
 }
 
