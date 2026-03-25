@@ -314,6 +314,7 @@ function evaluateIt() {
             preview += getPreviewLabelHTMLElement(textL, 0, minY - 0.7);
             preview += getPreviewLabelHTMLElement(textM, (column_width + orbital_width), minY - 0.7);
             preview += getPreviewLabelHTMLElement(textR, (column_width + orbital_width) * 2, minY - 0.7);
+            minY = Math.min(minY, minY - 0.7);
         }
     }
 
