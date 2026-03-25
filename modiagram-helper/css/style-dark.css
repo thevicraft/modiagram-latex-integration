@@ -27,7 +27,9 @@ h3 input {
 
 
 textarea {
-    background: #f4f4f4;
+    border-color: #c2c2c2;
+    background-color: #363636c4;
+    color: #ff9dfa;
 }
 
 .nice_box {

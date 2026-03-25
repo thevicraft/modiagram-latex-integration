@@ -79,9 +79,19 @@ var values_right = [];
 function evaluateIt() {
     let code = "";
 
-    code += '\t\\initdiagram\n';
-    code += `\t\\def\\columndistance{${column_width}}\n`;
-    code += `\t\\def\\diagrammode{${(compact ? 'compact' : 'normal')}}\n`;
+    let ind1 = '';
+    let ind2 = '\t';
+    if (document.getElementById('make_figure').checked) {
+        ind1 = '\t';
+        ind2 = '\t\t';
+        code += '\\begin{figure}\n';
+        if (document.getElementById('figure-centered').checked)
+            code += ind1 + '\\centering\n';
+    }
+
+    code += ind1 + '\\begin{mohelper}\n';
+    code += ind2 + `\\def\\columndistance{${column_width}}\n`;
+    code += ind2 + `\\def\\diagrammode{${(compact ? 'compact' : 'normal')}}\n`;
 
 
     var commands = [];
@@ -228,7 +238,7 @@ function evaluateIt() {
         }
 
         for (let i = 0; i < list.length; i++) {
-            commands.push('\\degenerate{' + list[i][0] + '}{' + elecs[i] + '}{' + side + '}');
+            commands.push(ind2 + '\\degenerate{' + list[i][0] + '}{' + elecs[i] + '}{' + side + '}');
             drawPreview(list[i][0], elecs[i], side, list[i][4]);
         }
 
@@ -269,7 +279,7 @@ function evaluateIt() {
                 values_middle.forEach(orbital_middle => {
                     if (orbital_middle[1].includes(group)) {
                         // wenn das orbital in der symmetriegruppe drin ist
-                        commands.push('\\connectorbital{' + orbital_left[0] + '}{' + orbital_left[2] + '}{' + orbital_middle[0] + '}{' + orbital_middle[2] + '}{left}');
+                        commands.push(ind2 + '\\connectorbital{' + orbital_left[0] + '}{' + orbital_left[2] + '}{' + orbital_middle[0] + '}{' + orbital_middle[2] + '}{left}');
                         drawConnection(orbital_left[0], orbital_left[2], orbital_middle[0], orbital_middle[2], 'left');
                         // values_right.forEach(orbital_right => {
                         //     if (orbital_right[1].includes(group)) {
@@ -288,7 +298,7 @@ function evaluateIt() {
                 values_right.forEach(orbital_right => {
                     if (orbital_right[1].includes(group)) {
                         // wenn das orbital in der symmetriegruppe drin ist
-                        commands.push('\\connectorbital{' + orbital_middle[0] + '}{' + orbital_middle[2] + '}{' + orbital_right[0] + '}{' + orbital_right[2] + '}{right}');
+                        commands.push(ind2 + '\\connectorbital{' + orbital_middle[0] + '}{' + orbital_middle[2] + '}{' + orbital_right[0] + '}{' + orbital_right[2] + '}{right}');
                         drawConnection(orbital_middle[0], orbital_middle[2], orbital_right[0], orbital_right[2], 'right');
                     }
                 });
@@ -310,7 +320,7 @@ function evaluateIt() {
         const textM = document.getElementById('column_label_middle').value.trim();
         const textR = document.getElementById('column_label_right').value.trim();
         if (textL.length > 0 || textM.length > 0 || textR.length > 0) {
-            code += `\t\\addlabel{${textL},${textM},${textR}}{0}\n`;
+            code += ind2 + `\\addlabel{${textL},${textM},${textR}}{0}\n`;
             preview += getPreviewLabelHTMLElement(textL, 0, minY - 0.7);
             preview += getPreviewLabelHTMLElement(textM, (column_width + orbital_width), minY - 0.7);
             preview += getPreviewLabelHTMLElement(textR, (column_width + orbital_width) * 2, minY - 0.7);
@@ -320,7 +330,18 @@ function evaluateIt() {
 
 
     if (energy_scale) {
-        code += '\t\\addenergyscale{0}\n';
+        code += ind2 + '\\addenergyscale{0}\n';
+    }
+    code += ind1 + '\\end{mohelper}\n';
+
+    if (document.getElementById('make_figure').checked) {
+        const ref = document.getElementById('figure-reference').value;
+        const caption = document.getElementById('figure-caption').value;
+        if (caption.length > 0)
+            code += ind1 + `\\caption{${caption}}\n`;
+        if (ref.length > 0)
+            code += ind1 + `\\label{${ref}}\n`;
+        code += '\\end{figure}\n';
     }
 
     // alle latex macros werden übergeben

@@ -106,10 +106,36 @@ br {
 }
 
 textarea {
-    width: 100%;
+    width: 50%;
     box-sizing: border-box;
     height: 300px;
     font-family: monospace;
+    align-self: center;
+    margin: 0 auto;
+    border-radius: 25px;
+    border: 2px solid;
+    padding: 10px;
+}
+
+#make_figure_label {
+    text-align: center;
+    align-self: center;
+    padding: 10px;
+}
+
+#figure-settings-container {
+    border-color: gray;
+    background-color: rgba(83, 170, 141, 0.671);
+    width: 20%;
+    text-align: center;
+}
+
+#figure-settings {
+    text-align: left;
+}
+
+#figure-settings ul li {
+    padding-bottom: 5px;
 }
 
 

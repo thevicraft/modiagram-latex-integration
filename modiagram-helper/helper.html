@@ -52,7 +52,8 @@
 
     </div>
     <br>
-    <button onclick="evaluateIt()" style="background: #4CAF50; color: white;">Generate LaTeX Code</button>
+    <button onclick="evaluateIt();window.scrollTo(0, document.getElementById('output').offsetTop);"
+        style="background: #4CAF50; color: white;">Generate LaTeX Code</button>
     <br>
     <div class="output-area">
         <div class="nice_box" id="diagram-settings">
@@ -79,8 +80,40 @@
         </div>
     </div>
 
-    <div>
-        <h2>LaTeX Output</h2>
+    <h2>LaTeX Output</h2>
+    <div class="output-area">
+        <div class="nice_box" id="figure-settings-container">
+            <label id="make_figure_label">
+                <input type="checkbox"
+                    onchange="document.getElementById('figure-settings').hidden=!this.checked;evaluateIt();"
+                    id="make_figure" checked>
+                Create figure
+            </label>
+            <div id="figure-settings">
+                <ul>
+                    <li>
+                        <label>
+                            centered:
+                            <input onchange="evaluateIt();" type="checkbox" id="figure-centered" checked>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            reference:
+                            <input class="file-controls" onchange="evaluateIt();" type="text" id="figure-reference"
+                                value="fig:modiagram1">
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            caption:
+                            <input class="file-controls" onchange="evaluateIt();" type="text" id="figure-caption"
+                                value="">
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <textarea id="output" readonly></textarea>
     </div>
 
