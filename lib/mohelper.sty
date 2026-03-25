@@ -6,6 +6,17 @@
 
 \usetikzlibrary{arrows.meta}
 
+% Definition der Umgebung
+\newenvironment{mohelper}[1][]{%
+    % Code, der beim START ausgeführt wird (\begin{mohelper})
+    \begin{tikzpicture}[#1] % Erlaubt zusätzliche TikZ-Optionen
+        \initdiagram
+        }{%
+        % Code, der am ENDE ausgeführt wird (\end{mohelper})
+    \end{tikzpicture}
+}
+
+
 \newcommand{\orbitallength}{0.8}
 \newcommand{\orbitaldistance}{0.2}
 \newcommand{\columndistance}{3}

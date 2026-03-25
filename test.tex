@@ -6,11 +6,7 @@
 \usepackage{graphicx}
 \usepackage{color}
 
-% \usepackage{modiagram-latex-integration}
-% \makeatletter
-% \def\input@path{{lib/}} % Fügt den Ordner 'lib' zum Suchpfad hinzu
-% \makeatother
-\input{./lib/modiagram-latex-integration.sty}
+\input{./lib/mohelper.sty}
 
 \title{MO Diagram Integration for LaTeX}
 \author{thevicraft}
@@ -86,15 +82,20 @@ some text.
 
 \end{tikzpicture}
 
-\begin{tikzpicture}
-    \initdiagram
-    \def\diagrammode{compact}
-    \degenerate{4}{gfys/up,/empty}{left}
-    \degenerate{5}{fck/empty}{left}
-    \degenerate{0}{text/empty}{middle}
-    \degenerate{0}{text/empty}{right}
-    \connectorbital{4}{2}{0}{1}{left}
-    \connectorbital{0}{1}{0}{1}{right}
-\end{tikzpicture}
+\begin{figure}
+    \centering
+    \begin{mohelper}
+        \initdiagram
+        \def\diagrammode{compact}
+        \degenerate{4}{gfys/up,/empty}{left}
+        \degenerate{5}{fck/empty}{left}
+        \degenerate{0}{text/empty}{middle}
+        \degenerate{0}{text/empty}{right}
+        \connectorbital{4}{2}{0}{1}{left}
+        \connectorbital{0}{1}{0}{1}{right}
+    \end{mohelper}
+    \caption{test diagram}
+    \label{fig:mo1}
+\end{figure}
 
 \end{document}
