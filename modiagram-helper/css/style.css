@@ -230,16 +230,19 @@ td input[type="text"] {
     border-radius: 15px;
     border: none;
     padding: 3px;
-    height: auto;
+    height: 22pt;
+    line-height: 22px;
     width: 22pt;
     font-size: 14pt;
     text-align: center;
-    align-self: right;
     color: rgb(43, 72, 134);
+    vertical-align: middle;
 }
 
 #theme_switch:hover {
+    transform: rotate(45deg);
     color: black;
+    transition: transform 0.3s ease;
 }
 
 .remove_orbital {
@@ -305,4 +308,15 @@ td input[type="text"] {
 .add_orbital:hover {
     filter: brightness(150%);
     -webkit-filter: brightness(150%);
+}
+
+#license {
+    width: fit-content;
+    padding: 10px;
+
+
+    margin: 0 auto;
+    text-align: center;
+
+
 }
