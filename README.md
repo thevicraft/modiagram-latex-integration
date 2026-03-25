@@ -1,5 +1,3 @@
-$name: `modiagram-latex-integration.sty`
-
 # ⚛️ MO-Diagram LaTeX Integration & Helper
 
 A powerful interactive tool designed to simplify the creation of **Molecular Orbital (MO) Diagrams** for LaTeX documents. This project bridges the gap between complex manual coding and visual design, providing a seamless workflow for chemists and researchers.
@@ -79,4 +77,4 @@ Contributions are what make the open-source community such an amazing place to l
 ---
 
 ## 📄 License
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the GPL-3.0 License. See `LICENSE` for more information.
