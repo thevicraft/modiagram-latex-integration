@@ -105,6 +105,13 @@ br {
     flex: 1;
 }
 
+.output-area iframe {
+    border-radius: 25px;
+    border: 2px solid;
+    border-color: darkgray;
+    background-color: #e0e0e0de;
+}
+
 textarea {
     width: 50%;
     box-sizing: border-box;
