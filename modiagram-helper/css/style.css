@@ -106,6 +106,8 @@ br {
 }
 
 .output-area iframe {
+    width: 30%;
+    box-sizing: border-box;
     border-radius: 25px;
     border: 2px solid;
     border-color: darkgray;
@@ -113,7 +115,7 @@ br {
 }
 
 textarea {
-    width: 50%;
+    width: 45%;
     box-sizing: border-box;
     height: 300px;
     font-family: monospace;

@@ -614,8 +614,10 @@ function saveCheck() {
 addInputArea('left');
 addInputArea('middle');
 addInputArea('right');
-addOrbital('left', 4, 'a1', 2, 1, 'gfys');
-addOrbital('left', 5, 'a2', 1, 0, 'fck');
+addOrbital('left', 0, 'a1', 1, 1, '1s');
+addOrbital('right', 0, 'a1', 1, 1, '1s');
+addOrbital('middle', -2, 'a1', 1, 2, '');
+addOrbital('middle', 2, 'a1', 1, 0, '');
 loadFromCache();
 
 
