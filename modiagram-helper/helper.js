@@ -585,7 +585,7 @@ function changeProject(name, data) {
 }
 
 function saveProject() {
-    name = document.getElementById('file_name_save').value;
+    let name = document.getElementById('file_name_save').value;
 
     cache[name] = getCurrentData();
     // console.log('vorher: ', cache[name]);

@@ -18,6 +18,15 @@ h1 {
     backdrop-filter: blur(2px);
 }
 
+h1 img {
+
+    height: 35pt;
+    line-height: 35px;
+    width: 35pt;
+    text-align: center;
+    vertical-align: middle;
+}
+
 .file-controls :nth-child {
     vertical-align: middle;
 }
