@@ -75,6 +75,7 @@ function addOrbital(placement, initialenergy, initialsymmetry, initialdegenerati
 var values_left = [];
 var values_middle = [];
 var values_right = [];
+var symmetrygroups = [];
 
 function evaluateIt() {
     let code = "";
@@ -95,7 +96,6 @@ function evaluateIt() {
 
 
     var commands = [];
-    preview = '';
     minX = 100;
     maxX = -100;
     minY = 100;
@@ -108,7 +108,7 @@ function evaluateIt() {
     values_right = extractDataFromGUI('right');
     var elecs_right = returnElecLatexSyntax(values_right);
 
-    var symmetrygroups = [];
+    symmetrygroups = [];
     // ----
     function addsymmetry(obj) {
         obj.forEach(row => {
@@ -352,6 +352,76 @@ function evaluateIt() {
     saveCheck();
 }
 
+function calculateMOs() {
+    symmetrygroups.forEach(group => {
+        if (group === ',') { return; }
+
+        let overlapping = values_right.filter(function (element) {
+            return element[1].includes(group);
+        });
+        overlapping = overlapping.concat(values_left.filter(function (element) {
+            return element[1].includes(group);
+        })).sort((x, y) => x[0] - y[0]);
+
+        // console.log(overlapping);
+
+        switch (overlapping.length) {
+            case 0:
+                break;
+            case 1:
+                addOrbital('middle', overlapping[0][0], group, overlapping[0][2], overlapping[0][3], '');
+                break;
+            case 2:
+                const average = (Number(overlapping[0][0]) + Number(overlapping[1][0])) / 2;
+                const h12 = average * 0.8 * 1.75;// / ((+overlapping[0][2] + +overlapping[1][2]) / 2);
+                console.log((+overlapping[0][2] + +overlapping[1][2]) / 2);
+                const wurzel = Math.sqrt((average * average) + (h12 * h12));
+                const e1 = average - wurzel;
+                const e2 = average + wurzel;
+
+                const n_e = Math.min(+overlapping[0][3], +overlapping[0][2] * 2) + Math.min(+overlapping[1][3], +overlapping[1][2] * 2);//electrons
+                addOrbital('middle', e1, group, Math.min(overlapping[0][2], overlapping[1][2]), Math.min(n_e, overlapping[0][2] * 2), '');
+                addOrbital('middle', e2, group, Math.min(overlapping[0][2], overlapping[1][2]), Math.max(0, n_e - overlapping[0][2] * 2), '');
+                break;
+            default:
+                break;
+        }
+        // values_right.forEach(orbital_right => {
+        //     if (orbital_right[1].includes(group)) {
+        //         // wenn das orbital in der symmetriegruppe drin ist
+        //         const average = (Number(orbital_left[0]) + Number(orbital_right[0])) / 2;
+        //         const h12 = average * 0.8 * 1.75;
+        //         const wurzel = Math.sqrt((average * average) + (h12 * h12));
+        //         const e1 = average + wurzel;
+        //         const e2 = average - wurzel;
+        //         addOrbital('middle', e1, group, 1, 0, '');
+        //         addOrbital('middle', e2, group, 1, 0, '');
+        //     }
+        // });
+
+
+        // values_left.forEach(orbital_left => {
+        //     if (orbital_left[1].includes(group)) {
+        //         // wenn das orbital in der symmetriegruppe drin ist
+        //         values_right.forEach(orbital_right => {
+        //             if (orbital_right[1].includes(group)) {
+        //                 // wenn das orbital in der symmetriegruppe drin ist
+        //                 const average = (Number(orbital_left[0]) + Number(orbital_right[0])) / 2;
+        //                 const h12 = average * 0.8 * 1.75;
+        //                 const wurzel = Math.sqrt((average * average) + (h12 * h12));
+        //                 const e1 = average + wurzel;
+        //                 const e2 = average - wurzel;
+        //                 addOrbital('middle', e1, group, 1, 0, '');
+        //                 addOrbital('middle', e2, group, 1, 0, '');
+        //             }
+        //         });
+        //     }
+        // });
+
+    });
+    evaluateIt();
+}
+
 function extractDataFromGUI(placement) {
     var obj = document.querySelectorAll('.orbitals_data_' + placement);
     var values = [];
@@ -493,21 +563,6 @@ function loadProject(jsondata) {
 //-------------------------------------------------------------------------------------------------
 // beim start der seite wird das hier immer ausgeführt:
 
-
-// document.getElementById('compact').addEventListener('change', function () {
-//     compact = this.checked;
-//     evaluateIt();
-// });
-// document.getElementById('add_energy_scale').addEventListener('change', function () {
-//     energy_scale = this.checked;
-//     evaluateIt();
-// });
-// document.getElementById('disable_mathjax').addEventListener('change', function () {
-//     disable_mathjax = this.checked;
-//     evaluateIt();
-// });
-
-
 document.getElementById('file-upload').addEventListener('change', function (event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -613,14 +668,6 @@ function saveCheck() {
     }
     document.getElementById('unsaved_notifier').textContent = 'unsaved changes';
     return false;
-}
-
-
-// Direkt ein erstes Feld anzeigen
-// addOrbital();
-
-if (window.MathJax && MathJax.typesetClear) {
-    MathJax.typesetClear([document]);
 }
 
 addInputArea('left');
