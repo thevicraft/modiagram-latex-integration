@@ -78,7 +78,7 @@ var values_right = [];
 
 function evaluateIt() {
     let code = "";
-
+    preview = '';
     let ind1 = '';
     let ind2 = '\t';
     if (document.getElementById('make_figure').checked) {
@@ -142,7 +142,7 @@ function evaluateIt() {
             const g = getImageURL(trick[1]);
             return `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
         }
-        return preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${text}</text>`;
+        return `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${text}</text>`;
     }
 
     function drawOrbital(list, elecs, side) {
@@ -462,6 +462,11 @@ function updatePreview() {
     const rand_width = 1;
     const rand_height = 1;
     svg.setAttribute('viewBox', `${minX - rand_width} ${minY - rand_height} ${maxX - minX + 2 * rand_width} ${maxY - minY + 2 * rand_height}`);
+
+
+    if (window.MathJax && MathJax.typesetClear) {
+        MathJax.typesetClear([svg]);
+    }
     svg.innerHTML = preview;
 }
 
@@ -488,18 +493,20 @@ function loadProject(jsondata) {
 //-------------------------------------------------------------------------------------------------
 // beim start der seite wird das hier immer ausgeführt:
 
-document.getElementById('compact').addEventListener('change', function () {
-    compact = this.checked;
-    evaluateIt();
-});
-document.getElementById('add_energy_scale').addEventListener('change', function () {
-    energy_scale = this.checked;
-    evaluateIt();
-});
-document.getElementById('disable_mathjax').addEventListener('change', function () {
-    disable_mathjax = this.checked;
-    evaluateIt();
-});
+
+// document.getElementById('compact').addEventListener('change', function () {
+//     compact = this.checked;
+//     evaluateIt();
+// });
+// document.getElementById('add_energy_scale').addEventListener('change', function () {
+//     energy_scale = this.checked;
+//     evaluateIt();
+// });
+// document.getElementById('disable_mathjax').addEventListener('change', function () {
+//     disable_mathjax = this.checked;
+//     evaluateIt();
+// });
+
 
 document.getElementById('file-upload').addEventListener('change', function (event) {
     const file = event.target.files[0];
@@ -611,6 +618,11 @@ function saveCheck() {
 
 // Direkt ein erstes Feld anzeigen
 // addOrbital();
+
+if (window.MathJax && MathJax.typesetClear) {
+    MathJax.typesetClear([document]);
+}
+
 addInputArea('left');
 addInputArea('middle');
 addInputArea('right');

@@ -59,15 +59,17 @@
         <div class="nice_box" id="diagram-settings">
             <ul>
                 <li><label>
-                        <input type="checkbox" id="compact" unchecked>
+                        <input type="checkbox" onchange="compact = this.checked;evaluateIt();" id="compact" unchecked>
                         Compact
                     </label></li>
                 <li><label>
-                        <input type="checkbox" id="add_energy_scale" unchecked>
+                        <input type="checkbox" onchange="energy_scale = this.checked;evaluateIt();"
+                            id="add_energy_scale" unchecked>
                         Add energy scale
                     </label></li>
                 <li><label>
-                        <input type="checkbox" id="disable_mathjax" unchecked>
+                        <input type="checkbox" onchange="disable_mathjax = this.checked;evaluateIt();"
+                            id="disable_mathjax" unchecked>
                         Disable MathJax in preview
                     </label></li>
             </ul>
