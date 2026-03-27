@@ -73,7 +73,14 @@
                         Disable MathJax in preview
                     </label></li>
                 <li>
-                    <button onclick="calculateMOs();">Calculate MOs (experimental)</button>
+                    <label>
+                        Column distance:
+                        <input class="file-controls" onchange="column_width=Number(this.value);evaluateIt();"
+                            type="number" id="column_width" step="0.1" value="3">
+                    </label>
+                </li>
+                <li>
+                    <button onclick="calculateMOs();">predict MOs (experimental)</button>
                 </li>
             </ul>
         </div>

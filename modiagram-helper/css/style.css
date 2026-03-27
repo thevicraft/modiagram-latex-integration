@@ -185,6 +185,13 @@ td input {
     border: 1px solid;
 }
 
+.nice_box input[type="number"] {
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid;
+    width: 35px;
+    text-align: center;
+}
 
 .degeneration {
     width: 30px;

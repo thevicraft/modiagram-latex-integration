@@ -453,6 +453,8 @@ function extractGUIFromData(data) {
     compact = data.compact;
     document.getElementById('add_energy_scale').checked = data.energy_scale;
     energy_scale = data.energy_scale;
+    document.getElementById('column_width').value = Number(data.column_width);
+    column_width = data.column_width;
 
     document.getElementById('column_label_left').value = data.column_label_left;
     document.getElementById('column_label_middle').value = data.column_label_middle;
@@ -508,6 +510,7 @@ function getCurrentData() {
         'right': Array.from(values_right),
         'compact': compact,
         'energy_scale': energy_scale,
+        'column_width': column_width,
         'column_label_left': document.getElementById('column_label_left').value,
         'column_label_middle': document.getElementById('column_label_middle').value,
         'column_label_right': document.getElementById('column_label_right').value
@@ -521,6 +524,7 @@ function getEmptyData() {
         'right': [],
         'compact': false,
         'energy_scale': false,
+        'column_width': 3,
         'column_label_left': '',
         'column_label_middle': '',
         'column_label_right': ''
@@ -606,21 +610,26 @@ function loadFromCache() {
         console.log('kein json');
         return;
     }
-
-    cache = JSON.parse(jsonString);
+    cache = {};
+    let load = JSON.parse(jsonString);
 
     const selector = document.getElementById('project-selector');
 
     document.querySelectorAll('.projects_dropdown').forEach(i => {
         i.remove();
     });
-    Object.keys(cache).forEach(name => {
+    Object.keys(load).forEach(name => {
         console.log('Loading from cache: ' + name);
         const option = document.createElement('option');
         option.value = name;      // Der interne Wert (Key)
         option.textContent = name; // Der Text, den der User sieht
         option.className = 'projects_dropdown'
         selector.appendChild(option);
+
+        cache[name] = getEmptyData();
+        Object.keys(load[name]).forEach(e => {
+            cache[name][e] = load[name][e];
+        });
     });
 
 }
