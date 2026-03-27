@@ -1,10 +1,9 @@
-test.synctex.gz
-test.fdb_latexmk
-test.log
 modiagram-helper/data/background-image-orig.png
-test.fdb_latexmk
-test.fls
+test.synctex.gz
 test.fdb_latexmk
 test.fls
 test.log
 test.lof
+test.pdf
+test.aux
+indent.log
