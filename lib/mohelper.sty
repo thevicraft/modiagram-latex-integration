@@ -65,6 +65,48 @@
 \ifstrequal{#2}{right}{\pgfmathsetmacro{\xpos}{\orbitallength/2 + #3 + 2 * (\orbitallength + \columndistance)}}{}
 \draw[<->, red, {Stealth[scale=0.7]}-{Stealth[scale=0.7]}, semithick] (\xpos,\orbdown) -- (\xpos,\orbup) node[midway, right, font=\footnotesize] {#4};
 }
+% 1: energy
+% 2: degeneration
+% 3: side
+% 4: align
+% 5: textcontent
+\newcommand{\degeneratelabel}[5]{
+
+    \ifstrequal{#3}{left}{\pgfmathsetmacro{\xpos}{0}}{}
+    \ifstrequal{#3}{middle}{\pgfmathsetmacro{\xpos}{\orbitallength + \columndistance}}{}
+    \ifstrequal{#3}{right}{\pgfmathsetmacro{\xpos}{2 * (\orbitallength + \columndistance)}}{}
+
+    \ifdefstring{\diagrammode}{compact}{
+        \pgfmathsetmacro{\lengthkette}{\orbitallength}
+    }{
+        \pgfmathsetmacro{\lengthkette}{#2 * \orbitallength + (#2 - 1) * \orbitaldistance}
+    }
+    % \pgfmathsetmacro{\offset}{\xpos + \orbitallength /2 + \lengthkette /2}
+
+    \ifstrequal{#4}{left}{
+        \node[anchor=east, font=\scriptsize] at (\xpos + \orbitallength /2 - \lengthkette /2,#1) {#5};
+    }{}
+    \ifstrequal{#4}{right}{
+        \node[anchor=west, font=\scriptsize] at (\xpos + \orbitallength /2 + \lengthkette /2,#1) {#5};
+    }{}
+    \ifstrequal{#4}{bottom}{
+        \ifdefstring{\diagrammode}{compact}{
+            \edef\labeldistance{3pt}
+        }{
+            \edef\labeldistance{7pt}
+        }
+        \node[below=\labeldistance, font=\scriptsize] at (\xpos + \orbitallength /2,#1) {#5};
+    }{}
+    \ifstrequal{#4}{top}{
+        \ifdefstring{\diagrammode}{compact}{
+            \edef\labeldistance{3pt}
+        }{
+            \edef\labeldistance{7pt}
+        }
+        \node[above=\labeldistance, font=\scriptsize] at (\xpos + \orbitallength /2,#1) {#5};
+    }{}
+
+}
 
 % 1. Ein Befehl für ein einzelnes Orbital (eine Linie)
 % Syntax: \orbital(x,y){label}

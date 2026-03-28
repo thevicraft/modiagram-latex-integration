@@ -134,5 +134,55 @@ some text.
     \label{fig:modiagram1}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \begin{mohelper}[scale=0.8] % scale it to 0.8 of original size to fit on page
+        \def\columndistance{5.4} % set column distance to 5.4
+        \def\diagrammode{normal} % draw in normal mode
+        \degenerate{0}{/pair,/pair,3d/pair,/up,/up}{left}
+        \degenerate{3}{4s/empty}{left}
+        \degenerate{4.5}{/empty,4p/empty,/empty}{left}
+        \def\electroncolor{brown} % change color for t2g
+        \degenerate{0}{/pair,/pair,/pair}{middle}
+        \def\electroncolor{black} % change color back for rest
+        \degenerate{-4}{/pair}{middle}
+        \degenerate{6}{/empty}{middle}
+        \degenerate{-3}{/pair,/pair,/pair}{middle}
+        \degenerate{6.5}{/empty,/empty,/empty}{middle}
+        \degenerate{-2}{/pair,/pair}{middle}
+        \def\electroncolor{brown} % change color for eg*
+        \degenerate{1}{/up,/up}{middle}
+        \def\electroncolor{black} % change color back for rest
+        \degenerate{-1}{/pair,/pair,/pair,/pair,/pair,/pair}{right}
+        \connectorbital{0}{5}{0}{3}{left}
+        \connectorbital{0}{5}{-2}{2}{left}
+        \connectorbital{0}{5}{1}{2}{left}
+        \connectorbital{-2}{2}{-1}{6}{right}
+        \connectorbital{1}{2}{-1}{6}{right}
+        \connectorbital{3}{1}{-4}{1}{left}
+        \connectorbital{3}{1}{6}{1}{left}
+        \connectorbital{-4}{1}{-1}{6}{right}
+        \connectorbital{6}{1}{-1}{6}{right}
+        \connectorbital{4.5}{3}{-3}{3}{left}
+        \connectorbital{4.5}{3}{6.5}{3}{left}
+        \connectorbital{-3}{3}{-1}{6}{right}
+        \connectorbital{6.5}{3}{-1}{6}{right}
+        \addlabel{$Ni^{2+}$,,$6 \times H_2O$}{0} % draw labels
+        \addenergyscale{0} % add the energy scale
+        \showenergydifference{0,1}{middle}{1.5}{$\Delta_O$} % show ligand field splitting
+
+        \degeneratelabel{6.5}{3}{middle}{right}{$\color{blue}{2t_{1u}^*}$}
+        \degeneratelabel{6}{1}{middle}{right}{$\color{blue}{2a_{1g}^*}$}
+        \degeneratelabel{1}{2}{middle}{right}{$\color{blue}{2e_g^*}$}
+        \degeneratelabel{0}{3}{middle}{right}{$\color{blue}{1t_{2g}}$}
+        \degeneratelabel{-2}{2}{middle}{right}{$\color{blue}{1e_g}$}
+        \degeneratelabel{-3}{3}{middle}{right}{$\color{blue}{1t_{1u}}$}
+        \degeneratelabel{-4}{1}{middle}{right}{$\color{blue}{1a_{1g}}$}
+    \end{mohelper}
+    \caption{$[Ni(H_2O)_6]^{2+}$ complex}
+    \label{fig:modiagram3}
+\end{figure}
+
+
 
 \end{document}
