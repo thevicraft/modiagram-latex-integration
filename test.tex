@@ -98,4 +98,41 @@ some text.
     \label{fig:mo1}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \begin{mohelper}
+        \def\columndistance{3}
+        \def\diagrammode{compact}
+        \degenerate{0}{3d/empty,/empty,/empty,/empty,/empty}{left}
+        \degenerate{3}{4s/empty}{left}
+        \degenerate{4.5}{4p/empty,/empty,/empty}{left}
+        \degenerate{0}{/empty,/empty,/empty}{middle}
+        \degenerate{-4}{/empty}{middle}
+        \degenerate{6}{/empty}{middle}
+        \degenerate{-3}{/empty,/empty,/empty}{middle}
+        \degenerate{6.5}{/empty,/empty,/empty}{middle}
+        \degenerate{-2}{/empty,/empty}{middle}
+        \degenerate{1}{/empty,/empty}{middle}
+        \degenerate{-1}{LGO/empty,/empty,/empty,/empty,/empty,/empty}{right}
+        \connectorbital{0}{5}{0}{3}{left}
+        \connectorbital{0}{5}{-2}{2}{left}
+        \connectorbital{0}{5}{1}{2}{left}
+        \connectorbital{-2}{2}{-1}{6}{right}
+        \connectorbital{1}{2}{-1}{6}{right}
+        \connectorbital{3}{1}{-4}{1}{left}
+        \connectorbital{3}{1}{6}{1}{left}
+        \connectorbital{-4}{1}{-1}{6}{right}
+        \connectorbital{6}{1}{-1}{6}{right}
+        \connectorbital{4.5}{3}{-3}{3}{left}
+        \connectorbital{4.5}{3}{6.5}{3}{left}
+        \connectorbital{-3}{3}{-1}{6}{right}
+        \connectorbital{6.5}{3}{-1}{6}{right}
+        \addlabel{$Me^{n+}$,,6L}{0}
+        \addenergyscale{0}
+    \end{mohelper}
+    \caption{octahedral complex}
+    \label{fig:modiagram1}
+\end{figure}
+
+
 \end{document}

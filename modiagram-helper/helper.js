@@ -679,6 +679,12 @@ function saveCheck() {
     return false;
 }
 
+function copyToClipboard() {
+    navigator.clipboard.writeText(document.getElementById('output').value)
+        .then(() => console.log('Copied latex output to clipboard'))
+        .catch(err => console.error('Failed to copy: ', err));
+}
+
 addInputArea('left');
 addInputArea('middle');
 addInputArea('right');
