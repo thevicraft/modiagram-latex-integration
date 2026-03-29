@@ -1,9 +1,11 @@
 modiagram-helper/data/background-image-orig.png
-test.synctex.gz
-test.fdb_latexmk
-test.fls
-test.log
-test.lof
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.log
+*.lof
+*.out
+*.toc
 test.pdf
-test.aux
+*.aux
 indent.log
