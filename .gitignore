@@ -9,3 +9,4 @@ modiagram-helper/data/background-image-orig.png
 test.pdf
 *.aux
 indent.log
+docs/*.tex
