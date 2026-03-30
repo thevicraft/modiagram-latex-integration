@@ -7,6 +7,7 @@
 \usepackage{color}
 
 \input{./lib/mohelper.sty}
+\input{./lib/orbitals.tex}
 
 \title{MO Diagram Integration for LaTeX}
 \author{thevicraft}
@@ -183,6 +184,23 @@ some text.
     \label{fig:modiagram3}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \begin{mohelper}
+        \def\columndistance{3}
+        \def\diagrammode{normal}
+        \degenerate{0}{3d/empty,/empty,/empty,/empty,/empty}{middle}
 
+        \addOrbital{energy=4}
+        \addOrbital{config=down,sym={a1,t2g}}
+        \addOrbital{energy=4,config=down,sym=a1,side=middle}
+        \addOrbital{energy=8,config=down,sym=a1,side=right}
+        \addOrbital{energy=2,config={up,down,pair,down},labels={hey,,nice,to}}
+
+        \autoconnect
+    \end{mohelper}
+    \label{fig:modiagram8}
+\end{figure}
+% \orbitalist
 
 \end{document}

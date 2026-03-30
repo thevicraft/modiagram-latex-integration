@@ -1,432 +1,117 @@
-% !TeX root = ../test.tex
-
-\usepackage{tikz, xstring}
+\usepackage{pgfkeys}
 \usepackage{etoolbox}
-\usetikzlibrary{arrows.meta}
+\usepackage{xstring}
+% \input{./lib/mohelper.sty}
 
-\newcommand{\orbitallength}{0.8}
-\newcommand{\orbitaldistance}{0.2}
-\newcommand{\columndistance}{3}
-\def\diagrammode{normal}
-\def\electroncolor{black}
-
-\newcommand{\initdiagram}{
-    \xdef\minX{100}
-    \xdef\maxX{-100}
-    \xdef\minY{100}
-    \xdef\maxY{-100}
+\pgfkeys{
+    /mohelper/.cd,
+    energy/.default=0,
+    sym/.default=a1,
+    deg/.default=1,
+    config/.default=9
 }
 
-\newcommand{\addlabel}[2]{
-    \foreach \name [count=\i] in {#1}{
-            \pgfmathsetmacro{\pos}{\orbitallength/2 + (\i - 1) * (\orbitallength + \columndistance)}
-            \node[below=0pt, font=\scriptsize] at (\pos,\minY-0.5-#2) {\name};
+\makeatletter % Erlaubt @ in Namen für interne Befehle
+\def\cs{\orbit@listleft}{}
+\def\cs{\orbit@listmiddle}{}
+\def\cs{\orbit@listright}{}
+
+
+\newcommand{\addOrbital}[1]{
+    \pgfkeys{/mohelper/.cd,
+        energy/.store in=\tempEnergy,
+        energy=0,
+        sym/.store in=\tempSym,
+        sym=a1,
+        % deg/.store in=\tempDeg,
+        % deg=1,
+        config/.store in=\tempConfig,
+        config={empty},
+        labels/.store in=\tempLabels,
+        labels={},
+        side/.store in=\tempSide,
+        side=left,
+        #1
+    } % Verarbeite die User-Eingaben
+
+    \xdef\mergedstring{}
+    \foreach \spin [count=\ione] in \tempConfig {
+        \edef\labelorbital{}
+        \foreach \ee [count=\itwo] in \tempLabels {
+            \ifdefequal{\ione}{\itwo}{
+                \xdef\labelorbital{\ee}
+            }{}
         }
-}
-\newcommand{\addenergyscale}[1]{
-\draw[->, -{Stealth[scale=1.2]}, semithick] (\minX-0.5-#1,\minY-0.5) -- (\minX-0.5-#1,\maxY+0.5) node[anchor=east, font=\footnotesize] {E};
-}
+        \ifdefempty{\mergedstring}{
+            % Erster Eintrag: Kein Komma davor
+            \xdef\mergedstring{\labelorbital/\spin}
+        }{
+            % Alle weiteren Einträge: Mit Komma trennen
+            \xdef\mergedstring{\mergedstring,\labelorbital/\spin}
+        }
+    }
+    \StrCount{\tempConfig}{,}[\arrcount]%
+    \pgfmathsetmacro{\tempDeg}{int(\arrcount + 1)}%
 
-\newcommand{\showenergydifference}[4]{
-\StrBefore{#1}{,}[\orbup]%
-\StrBehind{#1}{,}[\orbdown]%
-\ifstrequal{#2}{left}{\pgfmathsetmacro{\xpos}{\orbitallength/2 + #3}}{}
-\ifstrequal{#2}{middle}{\pgfmathsetmacro{\xpos}{\orbitallength/2 + #3 + \orbitallength + \columndistance}}{}
-\ifstrequal{#2}{right}{\pgfmathsetmacro{\xpos}{\orbitallength/2 + #3 + 2 * (\orbitallength + \columndistance)}}{}
-\draw[<->, red, {Stealth[scale=0.7]}-{Stealth[scale=0.7]}, semithick] (\xpos,\orbdown) -- (\xpos,\orbup) node[midway, right, font=\footnotesize] {#4};
-}
+    \degenerate{\tempEnergy}{\mergedstring}{\tempSide}
 
-% 1. Ein Befehl für ein einzelnes Orbital (eine Linie)
-% Syntax: \orbital(x,y){label}
-\newcommand{\orbital}[4]{
-    \draw[thick] (#1,#2) -- (#1+\orbitallength,#2);% node[below, font=\scriptsize] {#3};
-    \ifstrequal{#4}{up}{\electronup{#1}{#2}}{}
-    \ifstrequal{#4}{down}{\electrondown{#1}{#2}}{}
-    \ifstrequal{#4}{pair}{\electronup{#1}{#2}\electrondown{#1}{#2}}{}
+    \degeneratelabel{\tempEnergy}{\tempDeg}{\tempSide}{top}{data=\tempSym/\tempEnergy/\tempDeg}
+    % \degeneratelabel{\tempEnergy}{1}{left}{bottom}{config=\tempSide}
+    \degeneratelabel{\tempEnergy}{\tempDeg}{\tempSide}{right}{\mergedstring}
 
-    \ifdefstring{\diagrammode}{compact}{
-        \edef\labeldistance{3pt}
-    }{
-        \edef\labeldistance{7pt}
+    \foreach \group in \tempSym {
+
+        \listcsxadd{orbit@list\tempSide}{\group/\tempEnergy/\tempDeg}
     }
 
-    \node[below=\labeldistance, font=\scriptsize] at (#1+\orbitallength/2,#2) {#3};
 
 
-    % \pgfmathsetmacro{\minX}{min(\minX, #1)}%
-    % \pgfmathsetmacro{\maxX}{max(\maxX, \maxX + \orbitallength /2)}%
-    % \pgfmathsetmacro{\minY}{min(\minY, #2)}%
-    % \pgfmathsetmacro{\maxY}{max(\maxY, #2)}%
 
-    \pgfmathsetmacro{\tempMinX}{min(\minX, #1)}
-    \pgfmathsetmacro{\tempMaxX}{max(\maxX, #1 + \orbitallength)} % Hier die volle Breite nehmen!
-    \pgfmathsetmacro{\tempMinY}{min(\minY, #2)}
-    \pgfmathsetmacro{\tempMaxY}{max(\maxY, #2)}
-
-    \xdef\minX{\tempMinX}
-    \xdef\maxX{\tempMaxX}
-    \xdef\minY{\tempMinY}
-    \xdef\maxY{\tempMaxY}
+    % \expandafter\typeout\expandafter{\csname orbit@listleft\endcsname}
 }
 
-% 2. Ein Befehl für Verbindungslinien (gestrichelt)
-% Syntax: \connect(x1,y1)(x2,y2)
-\newcommand{\drawconnection}[4]{
-    \draw[dashed, thin, gray] (#1+\orbitallength,#2) -- (#3,#4);
+
+\newcommand{\cslisttoarray}[2]{%
+    % #1 = Name der Quelle (z.B. orbit@list@left)
+    % #2 = Name des Ziel-Makros (z.B. \myArray)
+    \xdef#2{}% Ziel leeren
+    \def\do##1{%
+        \ifdefempty{#2}
+        {\xdef#2{##1}}% Erstes Element
+        {\xdef#2{#2,##1}}% Weitere Elemente mit Komma
+    }%
+    \dolistcsloop{#1}%
 }
 
-\tikzset{
-electronnormal/.style={\electroncolor, -{Stealth[harpoon]}, thick, semithick},
-electroncompact/.style={\electroncolor, very thin, ->, very thin}
-}
+\newcommand{\autoconnect}{
 
-\newcommand{\getelecspecs}{
-    \ifdefstring{\diagrammode}{compact}{
-        \pgfmathsetmacro{\electronlength}{\orbitaldistance * 0.5}
-        % \edef\electroncolor{red}
-        \edef\elecstyle{electroncompact}
-    }{
-        \edef\electronlength{0.3}
-        % \edef\eleccolor{black}
-        \edef\elecstyle{electronnormal}
+    \cslisttoarray{orbit@listleft}{\arrayLeft}
+    \cslisttoarray{orbit@listmiddle}{\arrayMiddle}
+    \cslisttoarray{orbit@listright}{\arrayRight}
+
+    \foreach \symmetry/\energy/\deg in \arrayLeft{
+
+        \foreach \symmetryy/\energyy/\degy in \arrayMiddle{
+
+            \ifdefequal{\symmetry}{\symmetryy}{
+                \connectorbital{\energy}{\deg}{\energyy}{\degy}{left}
+            }{}
+
+        }
     }
-}
+    \foreach \symmetry/\energy/\deg in \arrayMiddle{
 
-% 3. Ein Befehl für Elektronen (Pfeile)
-% Syntax: \electronup(x,y)
-\newcommand{\electronup}[2]{
-    \getelecspecs
-    \draw[\elecstyle] (#1+0.3,#2-\electronlength) -- (#1+0.3,#2+\electronlength);
-}
-\newcommand{\electrondown}[2]{
-    \getelecspecs
-    \draw[\elecstyle] (#1+0.5,#2+\electronlength) -- (#1+0.5,#2-\electronlength);
-}
+        \foreach \symmetryy/\energyy/\degy in \arrayRight{
 
+            \ifdefequal{\symmetry}{\symmetryy}{
+                \connectorbital{\energy}{\deg}{\energyy}{\degy}{right}
+            }{}
 
-
-
-% hier die ganzes utils für a,e,t
-% param: 
-% 1: y-level
-% 2: name des orbitals
-% 3: zugehörigkeit: left right middle
-\newcommand{\nondegenerate}[4]{
-    % \newcommand{\xposition}{
-    \ifstrequal{#3}{left}{\def\xpos{0}}{}
-    \ifstrequal{#3}{middle}{\def\xpos{\orbitallength+\columndistance}}{}
-    \ifstrequal{#3}{right}{\def\xpos{\orbitallength*2+\columndistance*2}}{}
-    % }
-    \orbital{\xpos}{#1}{#2}{#4}
-}
-
-\newcommand{\twicedegenerate}[6]{
-    % \newcommand{\xposition}{
-    \ifstrequal{#4}{left}{\def\xposs{0}}{}
-    \ifstrequal{#4}{middle}{\def\xposs{\orbitallength+\columndistance}}{}
-    \ifstrequal{#4}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}
-    % }
-    \def\xpos{\xposs-\orbitallength/2-\orbitaldistance/2}
-    \orbital{\xpos}{#1}{#2}{#5}
-    \orbital{\xpos+\orbitallength+\orbitaldistance}{#1}{#3}{#6}
-}
-
-\newcommand{\tripledegenerate}[8]{
-    % \newcommand{\xposition}{
-    \ifstrequal{#5}{left}{\def\xposs{0}}{}
-    \ifstrequal{#5}{middle}{\def\xposs{\orbitallength+\columndistance}}{}
-    \ifstrequal{#5}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}
-    % }
-    \def\xpos{\xposs-\orbitallength-\orbitaldistance}
-    \orbital{\xpos}{#1}{#2}{#6}
-    \orbital{\xpos+\orbitallength+\orbitaldistance}{#1}{#3}{#7}
-    \orbital{\xpos+2*\orbitallength+2*\orbitaldistance}{#1}{#4}{#8}
-
-}
-
-% param: 
-% 1: y-level
-% 2: array {"name"/"spin",...}
-% 3: zugehörigkeit: left right middle
-\newcommand{\degenerate}[3]{
-
-    % \StrCount{#2}{,}[\arrlength]
-    % \foreach \name/\spin [count=\i] in {#2}{
-    %         \ifstrequal{#3}{left}{\def\xposs{0}}{}
-    %         \ifstrequal{#3}{middle}{\def\xposs{\orbitallength+\columndistance}}{}
-    %         \ifstrequal{#3}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}
-    %         % \def\xpos{\xposs-\orbitallength-\orbitaldistance}
-
-    %         \pgfmathsetmacro{\xpos}{\xposs - (\orbitallength + \orbitaldistance) * \arrlength /2 + (\i - 1) * (\orbitallength + \orbitaldistance)}
-
-    %         \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\name}{\spin}}
-    %         \tempcall
-    %     }
-    \ifdefstring{\diagrammode}{compact}{
-        \def\func{\degeneratecorrectedcompact}%
-    }{\def\func{\degeneratecorrected}}%
-    \func{#1}{#2}{#3}%
-
-}
-\DeclareListParser{\myCSVsplitter}{,}
-% NUR normaler modus
-\newcommand{\degeneratecorrected}[3]{%
-    % 1. Anzahl für Zentrierung berechnen
-    \StrCount{#2}{,}[\arrcount]%
-    \pgfmathsetmacro{\arrlength}{int(\arrcount + 1)}%
-
-    % 2. X-Basis bestimmen
-    \ifstrequal{#3}{left}{\def\xposs{0}}{}%
-    \ifstrequal{#3}{middle}{\def\xposs{\orbitallength+\columndistance}}{}%
-    \ifstrequal{#3}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}%
-
-    % 3. Der "Text-Splitter" von etoolbox
-    % Wir definieren eine Zählvariable für die Position
-    \def\currentIdx{0}%
-
-    % Dieser Befehl geht durch JEDES Element einer Komma-Liste, 
-    % egal ob sie als Text oder Makro kommt.
-    % \DeclareListParser{\myCSVsplitter}{,}%
-    \renewcommand*{\do}[1]{% 
-        % #1 ist jetzt z.B. "v/pair"
-        % Wir spalten den Schrägstrich mit xstring
-        \StrBefore{##1}{/}[\tempName]%
-        \StrBehind{##1}{/}[\tempSpin]%
-
-        % X-Position berechnen
-        \pgfmathsetmacro{\xpos}{\xposs - ((\orbitallength + \orbitaldistance) * (\arrlength - 1)) / 2 + (\currentIdx) * (\orbitallength + \orbitaldistance)}%
-
-        % Orbital zeichnen
-        % \orbital{\xpos}{#1}{\tempName}{\tempSpin}%
-        \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\tempName}{\tempSpin}}
-        \tempcall
-
-        % Index erhöhen
-        \pgfmathsetmacro{\nextIdx}{int(\currentIdx + 1)}%
-        \xdef\currentIdx{\nextIdx}%
-    }%
-
-    % JETZT der Aufruf, der den Text endlich aufbricht:
-    \expandafter\docsvlist\expandafter{#2}%
-}
-% NUR kompakter modus
-\newcommand{\degeneratecorrectedcompact}[3]{%
-    % 1. Anzahl für Zentrierung berechnen
-    \StrCount{#2}{,}[\arrcount]%
-    \pgfmathsetmacro{\arrlength}{int(\arrcount + 1)}%
-
-    % 2. X-Basis bestimmen
-    \ifstrequal{#3}{left}{\def\xposs{0}}{}%
-    \ifstrequal{#3}{middle}{\def\xposs{\orbitallength+\columndistance}}{}%
-    \ifstrequal{#3}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}%
-
-    % 3. Der "Text-Splitter" von etoolbox
-    % Wir definieren eine Zählvariable für die Position
-    \def\currentIdx{0}%
-
-    % Dieser Befehl geht durch JEDES Element einer Komma-Liste, 
-    % egal ob sie als Text oder Makro kommt.
-    % \DeclareListParser{\myCSVsplitter}{,}%
-    \renewcommand*{\do}[1]{% 
-        % #1 ist jetzt z.B. "v/pair"
-        % Wir spalten den Schrägstrich mit xstring
-        \StrBefore{##1}{/}[\tempName]%
-        \StrBehind{##1}{/}[\tempSpin]%
-
-        % X-Position berechnen
-        \pgfmathsetmacro{\ypos}{#1 - ((\orbitaldistance) * (\arrlength - 1)) / 2 + (\currentIdx) * (\orbitaldistance)}%
-
-        \ifcase\currentIdx
-        \else
-            \def\tempName{}
-        \fi
-
-        % Orbital zeichnen
-        % \orbital{\xpos}{#1}{\tempName}{\tempSpin}%
-        \edef\tempcall{\noexpand\orbital{\xposs}{\ypos}{\tempName}{\tempSpin}}
-        \tempcall
-
-        % Index erhöhen
-        \pgfmathsetmacro{\nextIdx}{int(\currentIdx + 1)}%
-        \xdef\currentIdx{\nextIdx}%
-    }%
-
-    % JETZT der Aufruf, der den Text endlich aufbricht:
-    \expandafter\docsvlist\expandafter{#2}%
-}
-
-\newcommand{\connecttriple}[1]{
-    \foreach \a/\b/\c/\d/\e/\f [count=\i] in {#1}{
-
-
-
-            \pgfmathsetmacro{\xposleft}{\orbitallength /2 + (\orbitallength * \b + \orbitaldistance * (\b - 1)) /2}
-            \pgfmathsetmacro{\xposmiddleleft}{(\orbitallength + \columndistance) +\orbitallength /2 - (\orbitallength * \d + \orbitaldistance * (\d - 1)) /2}
-            \pgfmathsetmacro{\xposmiddleright}{(\orbitallength + \columndistance)  + + \orbitallength /2+ (\orbitallength * \d + \orbitaldistance * (\d - 1)) /2}
-            \pgfmathsetmacro{\xposright}{(\orbitallength + \columndistance)*2 + \orbitallength /2 - (\orbitallength * \f + \orbitaldistance * (\f - 1)) /2}
-
-            % \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\name}{\spin}}
-            % \tempcall
-            \ifcase\b
-
-            \else
-                \draw[dashed, thin, gray] (\xposleft,\a) -- (\xposmiddleleft,\c);
-            \fi
-            \ifcase\f
-
-            \else
-                \draw[dashed, thin, gray] (\xposmiddleright,\c) -- (\xposright,\e);
-            \fi
         }
+    }
+
+
 }
 
-% \newcommand{\complete}[6]{
-%     \StrCount{#2}{,}[\b]
-%     \StrCount{#4}{,}[\d]
-%     \StrCount{#6}{,}[\f]
-%     \pgfmathsetmacro{\b}{\b + 1}
-%     \pgfmathsetmacro{\d}{\d + 1}
-%     \pgfmathsetmacro{\f}{\f + 1}
+\makeatother
 
-%     \pgfmathsetmacro{\xposleft}{\orbitallength /2 + (\orbitallength * \b + \orbitaldistance * (\b - 1)) /2}
-%     \pgfmathsetmacro{\xposmiddleleft}{(\orbitallength + \columndistance) +\orbitallength /2 - (\orbitallength * \d + \orbitaldistance * (\d - 1)) /2}
-%     \pgfmathsetmacro{\xposmiddleright}{(\orbitallength + \columndistance)  + + \orbitallength /2+ (\orbitallength * \d + \orbitaldistance * (\d - 1)) /2}
-%     \pgfmathsetmacro{\xposright}{(\orbitallength + \columndistance)*2 + \orbitallength /2 - (\orbitallength * \f + \orbitaldistance * (\f - 1)) /2}
-
-%     \ifcase\b
-
-%     \else
-%         \draw[dashed, thin, gray] (\xposleft,#1) -- (\xposmiddleleft,#3);
-
-
-
-%         \degenerate{#1}{#2}{left}
-
-
-%     \fi
-%     \ifcase\f
-
-%     \else
-%         \draw[dashed, thin, gray] (\xposmiddleright,#3) -- (\xposright,#5);
-%         \degenerate{#5}{#6}{right}
-%     \fi
-
-%     \degenerate{#3}{#4}{middle}
-%     % }
-% }
-
-\newcommand{\sliptogether}[6]{
-
-    \pgfmathsetmacro{\xposleft}{\orbitallength /2 + (\orbitallength * #2 + \orbitaldistance * (#2 - 1)) /2}
-    \pgfmathsetmacro{\xposmiddleleft}{(\orbitallength + \columndistance) +\orbitallength /2 - (\orbitallength * #4 + \orbitaldistance * (#4 - 1)) /2}
-    \pgfmathsetmacro{\xposmiddleright}{(\orbitallength + \columndistance)  + + \orbitallength /2+ (\orbitallength * #4 + \orbitaldistance * (#4 - 1)) /2}
-    \pgfmathsetmacro{\xposright}{(\orbitallength + \columndistance)*2 + \orbitallength /2 - (\orbitallength * #6 + \orbitaldistance * (#6 - 1)) /2}
-
-    % \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\name}{\spin}}
-    % \tempcall
-    \ifcase#2
-
-    \else
-        \draw[dashed, thin, gray] (\xposleft,#1) -- (\xposmiddleleft,#3);
-    \fi
-    \ifcase#6
-
-    \else
-        \draw[dashed, thin, gray] (\xposmiddleright,#3) -- (\xposright,#5);
-    \fi
-
-}
-% alte version des overlapp ohne compact möglichkeit
-% \newcommand{\overlapp}[3]{%
-
-%     \foreach \orbs/\elecs in {#1}{%
-%             \degeneratecorrected{\orbs}{\elecs}{left}%
-%         }
-%     \foreach \orbs/\elecs in {#2}{%
-%             \degeneratecorrected{\orbs}{\elecs}{middle}%
-%         }
-%     \foreach \orbs/\elecs in {#3}{%
-%             \degeneratecorrected{\orbs}{\elecs}{right}%
-%         }
-
-%     \foreach \atomorbitalone/\elecsleft in {#1}{%
-
-%             \StrCount{\elecsleft}{,}[\degeneratefirst]%
-%             \pgfmathsetmacro{\degeneratefirst}{\degeneratefirst + 1}
-%             \foreach \molecorb/\elecsmiddle in {#2}{%
-
-%                     \StrCount{\elecsmiddle}{,}[\degeneratesecond]%
-%                     \pgfmathsetmacro{\degeneratesecond}{\degeneratesecond + 1}
-%                     \sliptogether{\atomorbitalone}{\degeneratefirst}{\molecorb}{\degeneratesecond}{0}{0}
-
-
-%                     \foreach \atomorbitaltwo/\elecsright in {#3}{
-%                             \StrCount{\elecsright}{,}[\degeneratethird]%
-%                             \pgfmathsetmacro{\degeneratethird}{\degeneratethird + 1}%
-%                             \sliptogether{0}{0}{\molecorb}{\degeneratesecond}{\atomorbitaltwo}{\degeneratethird}%
-%                         }
-%                 }%
-%         }%
-% }%
-\newcommand{\connectorbital}[5]{
-    \ifstrequal{#5}{left}{
-        \ifdefstring{\diagrammode}{compact}{
-            \sliptogether{#1}{1}{#3}{1}{0}{0}%
-        }{
-            \sliptogether{#1}{#2}{#3}{#4}{0}{0}%
-        }%
-    }{
-        \ifdefstring{\diagrammode}{compact}{
-            \sliptogether{0}{0}{#1}{1}{#3}{1}%
-        }{
-            \sliptogether{0}{0}{#1}{#2}{#3}{#4}%
-        }%
-    }%
-}
-
-\newcommand{\overlapp}[3]{%
-
-    \ifdefstring{\diagrammode}{compact}{
-        \def\func{\degeneratecorrectedcompact}%
-    }{\def\func{\degeneratecorrected}}%
-
-    \foreach \orbs/\elecs in {#1}{%
-            \func{\orbs}{\elecs}{left}%
-        }
-    \foreach \orbs/\elecs in {#2}{%
-            \func{\orbs}{\elecs}{middle}%
-        }
-    \foreach \orbs/\elecs in {#3}{%
-            \func{\orbs}{\elecs}{right}%
-        }
-
-    \foreach \atomorbitalone/\elecsleft in {#1}{%
-
-            \StrCount{\elecsleft}{,}[\degeneratefirst]%
-            \pgfmathsetmacro{\degeneratefirst}{\degeneratefirst + 1}
-
-
-            \ifdefstring{\diagrammode}{compact}{\pgfmathsetmacro{\degeneratefirst}{1}}{}%
-
-
-            \foreach \molecorb/\elecsmiddle in {#2}{%
-
-                    \StrCount{\elecsmiddle}{,}[\degeneratesecond]%
-                    \pgfmathsetmacro{\degeneratesecond}{\degeneratesecond + 1}
-
-                    \ifdefstring{\diagrammode}{compact}{\pgfmathsetmacro{\degeneratesecond}{1}}{}%
-
-                    \sliptogether{\atomorbitalone}{\degeneratefirst}{\molecorb}{\degeneratesecond}{0}{0}
-
-
-                    \foreach \atomorbitaltwo/\elecsright in {#3}{
-                            \StrCount{\elecsright}{,}[\degeneratethird]%
-                            \pgfmathsetmacro{\degeneratethird}{\degeneratethird + 1}%
-
-                            \ifdefstring{\diagrammode}{compact}{\pgfmathsetmacro{\degeneratethird}{1}}{}%
-
-                            \sliptogether{0}{0}{\molecorb}{\degeneratesecond}{\atomorbitaltwo}{\degeneratethird}%
-                        }
-                }%
-        }%
-}%
