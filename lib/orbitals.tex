@@ -15,6 +15,12 @@
 \def\cs{\orbit@listleft}{}
 \def\cs{\orbit@listmiddle}{}
 \def\cs{\orbit@listright}{}
+\xdef\@tomside{left}
+
+\newcommand{\fragment}[2]{
+    \xdef\@tomside{#1}
+    #2
+}
 
 
 \newcommand{\addOrbital}[1]{
@@ -29,8 +35,12 @@
         config={empty},
         labels/.store in=\tempLabels,
         labels={},
+        label/.store in=\tempLabel,
+        label=,
+        labelposition/.store in=\tempLabelPosition,
+        labelposition=bottom,
         side/.store in=\tempSide,
-        side=left,
+        side=\@tomside,
         #1
     } % Verarbeite die User-Eingaben
 
@@ -55,9 +65,9 @@
 
     \degenerate{\tempEnergy}{\mergedstring}{\tempSide}
 
-    \degeneratelabel{\tempEnergy}{\tempDeg}{\tempSide}{top}{data=\tempSym/\tempEnergy/\tempDeg}
-    % \degeneratelabel{\tempEnergy}{1}{left}{bottom}{config=\tempSide}
-    \degeneratelabel{\tempEnergy}{\tempDeg}{\tempSide}{right}{\mergedstring}
+    % \degeneratelabel{\tempEnergy}{\tempDeg}{\tempSide}{top}{data=\tempSym/\tempEnergy/\tempDeg}
+    \degeneratelabel{\tempEnergy}{\tempDeg}{\tempSide}{\tempLabelPosition}{\tempLabel}
+    % \degeneratelabel{\tempEnergy}{\tempDeg}{\tempSide}{right}{\mergedstring}
 
     \foreach \group in \tempSym {
 

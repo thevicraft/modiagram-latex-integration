@@ -87,13 +87,14 @@
     }
     % \pgfmathsetmacro{\offset}{\xpos + \orbitallength /2 + \lengthkette /2}
 
-    \ifstrequal{#4}{left}{
+    \edef\labelalignment{#4}
+    \ifdefstring{\labelalignment}{left}{
         \node[anchor=east, font=\scriptsize] at (\xpos + \orbitallength /2 - \lengthkette /2,#1) {#5};
     }{}
-    \ifstrequal{#4}{right}{
+    \ifdefstring{\labelalignment}{right}{
         \node[anchor=west, font=\scriptsize] at (\xpos + \orbitallength /2 + \lengthkette /2,#1) {#5};
     }{}
-    \ifstrequal{#4}{bottom}{
+    \ifdefstring{\labelalignment}{bottom}{
         \ifdefstring{\diagrammode}{compact}{
             \edef\labeldistance{3pt}
         }{
@@ -101,7 +102,7 @@
         }
         \node[below=\labeldistance, font=\scriptsize] at (\xpos + \orbitallength /2,#1) {#5};
     }{}
-    \ifstrequal{#4}{top}{
+    \ifdefstring{\labelalignment}{top}{
         \ifdefstring{\diagrammode}{compact}{
             \edef\labeldistance{3pt}
         }{
