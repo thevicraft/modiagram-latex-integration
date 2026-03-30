@@ -12,16 +12,22 @@
 }
 
 \makeatletter % Erlaubt @ in Namen für interne Befehle
-\def\cs{\orbit@listleft}{}
-\def\cs{\orbit@listmiddle}{}
-\def\cs{\orbit@listright}{}
-\xdef\@tomside{left}
+% \def\cs{\orbit@listleft}{}
+% \def\cs{\orbit@listmiddle}{}
+% \def\cs{\orbit@listright}{}
+\xdef\@tomside{0}
 
-\newcommand{\fragment}[2]{
-    \xdef\@tomside{#1}
-    #2
+\newcounter{c@lumns}
+\setcounter{c@lumns}{-1}
+
+\newcommand{\fragment}[1]{
+    \addtocounter{c@lumns}{1}
+    \def\cs{\csname orbit@list\thec@lumns\endcsname}{}
+    \xdef\@tomside{\thec@lumns}
+    #1
 }
 
+\newcommand{\addLabel}[1]{}
 
 \newcommand{\addOrbital}[1]{
     \pgfkeys{/mohelper/.cd,
@@ -39,8 +45,8 @@
         label=,
         labelposition/.store in=\tempLabelPosition,
         labelposition=bottom,
-        side/.store in=\tempSide,
-        side=\@tomside,
+        column/.store in=\tempSide,
+        column=\@tomside,
         #1
     } % Verarbeite die User-Eingaben
 
@@ -65,9 +71,7 @@
 
     \degenerate{\tempEnergy}{\mergedstring}{\tempSide}
 
-    % \degeneratelabel{\tempEnergy}{\tempDeg}{\tempSide}{top}{data=\tempSym/\tempEnergy/\tempDeg}
     \degeneratelabel{\tempEnergy}{\tempDeg}{\tempSide}{\tempLabelPosition}{\tempLabel}
-    % \degeneratelabel{\tempEnergy}{\tempDeg}{\tempSide}{right}{\mergedstring}
 
     \foreach \group in \tempSym {
 
@@ -121,6 +125,29 @@
     }
 
 
+}
+
+\newcommand{\drawliness}{
+    \ifcase\thec@lumns
+        \relax
+    \fi
+    \pgfmathsetmacro{\range}{int(\thec@lumns - 1)}
+    \foreach \i in {0,..., \range} {
+            \cslisttoarray{orbit@list\i}{\arrayLeft}
+            \pgfmathsetmacro{\ii}{int(\i + 1)}
+            \cslisttoarray{orbit@list\ii}{\arrayMiddle}
+
+            \foreach \symmetry/\energy/\deg in \arrayLeft{
+
+                \foreach \symmetryy/\energyy/\degy in \arrayMiddle{
+
+                    \ifdefequal{\symmetry}{\symmetryy}{
+                        \connectfurther{\energy}{\deg}{\energyy}{\degy}{\i}
+                    }{}
+
+                }
+            }
+        }
 }
 
 \makeatother

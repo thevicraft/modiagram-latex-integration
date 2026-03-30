@@ -47,6 +47,10 @@
     \xdef\maxY{-100}
 }
 
+\newcommand{\calculateColumnX}[2]{
+    \pgfmathsetmacro{#1}{(\orbitallength + \columndistance) * #2}
+}
+
 \newcommand{\addlabel}[2]{
     \foreach \name [count=\i] in {#1}{
             \pgfmathsetmacro{\pos}{\orbitallength/2 + (\i - 1) * (\orbitallength + \columndistance)}
@@ -72,10 +76,11 @@
 % 5: textcontent
 \newcommand{\degeneratelabel}[5]{
 
-    \edef\side{#3}
-    \ifdefstring{\side}{left}{\def\xpos{0}}{}%
-    \ifdefstring{\side}{middle}{\def\xpss{\orbitallength+\columndistance}}{}%
-    \ifdefstring{\side}{right}{\def\xpos{\orbitallength*2+\columndistance*2}}{}%
+    % \edef\side{#3}
+    % \ifdefstring{\side}{left}{\def\xpos{0}}{}%
+    % \ifdefstring{\side}{middle}{\def\xpss{\orbitallength+\columndistance}}{}%
+    % \ifdefstring{\side}{right}{\def\xpos{\orbitallength*2+\columndistance*2}}{}%
+    \calculateColumnX{\xpos}{#3}
     % \ifstrequal{#3}{left}{\pgfmathsetmacro{\xpos}{0}}{}
     % \ifstrequal{#3}{middle}{\pgfmathsetmacro{\xpos}{\orbitallength + \columndistance}}{}
     % \ifstrequal{#3}{right}{\pgfmathsetmacro{\xpos}{2 * (\orbitallength + \columndistance)}}{}
@@ -253,10 +258,11 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
     \pgfmathsetmacro{\arrlength}{int(\arrcount + 1)}%
 
     % 2. X-Basis bestimmen
-    \edef\side{#3}
-    \ifdefstring{\side}{left}{\def\xposs{0}}{}%
-    \ifdefstring{\side}{middle}{\def\xposs{\orbitallength+\columndistance}}{}%
-    \ifdefstring{\side}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}%
+    % \edef\side{#3}
+    % \ifdefstring{\side}{left}{\def\xposs{0}}{}%
+    % \ifdefstring{\side}{middle}{\def\xposs{\orbitallength+\columndistance}}{}%
+    % \ifdefstring{\side}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}%
+    \calculateColumnX{\xposs}{#3}
 
     % 3. Der "Text-Splitter" von etoolbox
     % Wir definieren eine Zählvariable für die Position
@@ -294,10 +300,12 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
     \pgfmathsetmacro{\arrlength}{int(\arrcount + 1)}%
 
     % 2. X-Basis bestimmen
-    \edef\side{#3}
-    \ifdefstring{\side}{left}{\def\xposs{0}}{}%
-    \ifdefstring{\side}{middle}{\def\xposs{\orbitallength+\columndistance}}{}%
-    \ifdefstring{\side}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}%
+    % \edef\side{#3}
+    % \ifdefstring{\side}{left}{\def\xposs{0}}{}%
+    % \ifdefstring{\side}{middle}{\def\xposs{\orbitallength+\columndistance}}{}%
+    % \ifdefstring{\side}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}%
+
+    \calculateColumnX{\xposs}{#3}
 
     % 3. Der "Text-Splitter" von etoolbox
     % Wir definieren eine Zählvariable für die Position
@@ -359,41 +367,6 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
         }
 }
 
-% \newcommand{\complete}[6]{
-%     \StrCount{#2}{,}[\b]
-%     \StrCount{#4}{,}[\d]
-%     \StrCount{#6}{,}[\f]
-%     \pgfmathsetmacro{\b}{\b + 1}
-%     \pgfmathsetmacro{\d}{\d + 1}
-%     \pgfmathsetmacro{\f}{\f + 1}
-
-%     \pgfmathsetmacro{\xposleft}{\orbitallength /2 + (\orbitallength * \b + \orbitaldistance * (\b - 1)) /2}
-%     \pgfmathsetmacro{\xposmiddleleft}{(\orbitallength + \columndistance) +\orbitallength /2 - (\orbitallength * \d + \orbitaldistance * (\d - 1)) /2}
-%     \pgfmathsetmacro{\xposmiddleright}{(\orbitallength + \columndistance)  + + \orbitallength /2+ (\orbitallength * \d + \orbitaldistance * (\d - 1)) /2}
-%     \pgfmathsetmacro{\xposright}{(\orbitallength + \columndistance)*2 + \orbitallength /2 - (\orbitallength * \f + \orbitaldistance * (\f - 1)) /2}
-
-%     \ifcase\b
-
-%     \else
-%         \draw[dashed, thin, gray] (\xposleft,#1) -- (\xposmiddleleft,#3);
-
-
-
-%         \degenerate{#1}{#2}{left}
-
-
-%     \fi
-%     \ifcase\f
-
-%     \else
-%         \draw[dashed, thin, gray] (\xposmiddleright,#3) -- (\xposright,#5);
-%         \degenerate{#5}{#6}{right}
-%     \fi
-
-%     \degenerate{#3}{#4}{middle}
-%     % }
-% }
-
 \newcommand{\sliptogether}[6]{
 
     \pgfmathsetmacro{\xposleft}{\orbitallength /2 + (\orbitallength * #2 + \orbitaldistance * (#2 - 1)) /2}
@@ -415,38 +388,25 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
     \fi
 
 }
-% alte version des overlapp ohne compact möglichkeit
-% \newcommand{\overlapp}[3]{%
 
-%     \foreach \orbs/\elecs in {#1}{%
-%             \degeneratecorrected{\orbs}{\elecs}{left}%
-%         }
-%     \foreach \orbs/\elecs in {#2}{%
-%             \degeneratecorrected{\orbs}{\elecs}{middle}%
-%         }
-%     \foreach \orbs/\elecs in {#3}{%
-%             \degeneratecorrected{\orbs}{\elecs}{right}%
-%         }
+%connects to the right. the #5 is the column index that will connect to the (#5 +1) column
+\newcommand{\connectfurther}[5]{
 
-%     \foreach \atomorbitalone/\elecsleft in {#1}{%
+    \ifdefstring{\diagrammode}{compact}{
+        \pgfmathsetmacro{\degleft}{1}
+        \pgfmathsetmacro{\degright}{1}
+    }{
+        \pgfmathsetmacro{\degleft}{#2}
+        \pgfmathsetmacro{\degright}{#4}
+    }%
 
-%             \StrCount{\elecsleft}{,}[\degeneratefirst]%
-%             \pgfmathsetmacro{\degeneratefirst}{\degeneratefirst + 1}
-%             \foreach \molecorb/\elecsmiddle in {#2}{%
+    \pgfmathsetmacro{\xposleft}{(\orbitallength + \columndistance) * #5 +\orbitallength /2 + (\orbitallength * \degleft + \orbitaldistance * (\degleft - 1)) /2}
+    \pgfmathsetmacro{\xposmiddleleft}{(\orbitallength + \columndistance) * (#5 + 1) +\orbitallength /2 - (\orbitallength * \degright + \orbitaldistance * (\degright - 1)) /2}
 
-%                     \StrCount{\elecsmiddle}{,}[\degeneratesecond]%
-%                     \pgfmathsetmacro{\degeneratesecond}{\degeneratesecond + 1}
-%                     \sliptogether{\atomorbitalone}{\degeneratefirst}{\molecorb}{\degeneratesecond}{0}{0}
+    \draw[dashed, thin, gray] (\xposleft,#1) -- (\xposmiddleleft,#3);
 
+}
 
-%                     \foreach \atomorbitaltwo/\elecsright in {#3}{
-%                             \StrCount{\elecsright}{,}[\degeneratethird]%
-%                             \pgfmathsetmacro{\degeneratethird}{\degeneratethird + 1}%
-%                             \sliptogether{0}{0}{\molecorb}{\degeneratesecond}{\atomorbitaltwo}{\degeneratethird}%
-%                         }
-%                 }%
-%         }%
-% }%
 \newcommand{\connectorbital}[5]{
     \ifstrequal{#5}{left}{
         \ifdefstring{\diagrammode}{compact}{

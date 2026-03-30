@@ -27,181 +27,188 @@ some text.
 
 \section{Now some Diagrams}
 
-\begin{tikzpicture}
-    \initdiagram
-    \orbital{6}{0}{$d_{xz}$}{up}
-    \orbital{0}{0}{$d_{xz}$}{down}
-    \orbital{0}{3}{$d_{xz}$}{pair}
+% \begin{tikzpicture}
+%     \initdiagram
+%     \orbital{6}{0}{$d_{xz}$}{up}
+%     \orbital{0}{0}{$d_{xz}$}{down}
+%     \orbital{0}{3}{$d_{xz}$}{pair}
 
-    \nondegenerate{6}{2s}{left}{up}
-    \nondegenerate{6}{$\sigma$}{middle}{pair}
-    \nondegenerate{6}{2s}{right}{up}
+%     \nondegenerate{6}{2s}{left}{up}
+%     \nondegenerate{6}{$\sigma$}{middle}{pair}
+%     \nondegenerate{6}{2s}{right}{up}
 
-    \twicedegenerate{4}{a}{b}{left}{up}{up}
-    \twicedegenerate{4}{a}{b}{middle}{pair}{pair}
-    \twicedegenerate{4}{a}{b}{right}{down}{up}
+%     \twicedegenerate{4}{a}{b}{left}{up}{up}
+%     \twicedegenerate{4}{a}{b}{middle}{pair}{pair}
+%     \twicedegenerate{4}{a}{b}{right}{down}{up}
 
-    \tripledegenerate{2}{a}{b}{c}{middle}{pair}{pair}{pair}
-    \tripledegenerate{1}{a}{b}{c}{right}{pair}{pair}{pair}
+%     \tripledegenerate{2}{a}{b}{c}{middle}{pair}{pair}{pair}
+%     \tripledegenerate{1}{a}{b}{c}{right}{pair}{pair}{pair}
 
-    \degenerate{-2}{v/pair,g/up,u/down,h/pair}{left}
+%     \degenerate{-2}{v/pair,g/up,u/down,h/pair}{left}
 
-    \connecttriple{-2/4/2/3/1/3}
-    \connecttriple{4/2/6/1/4/2}
+%     \connecttriple{-2/4/2/3/1/3}
+%     \connecttriple{4/2/6/1/4/2}
 
-    \connecttriple{0/1/0/1/0/0}
+%     \connecttriple{0/1/0/1/0/0}
 
-\end{tikzpicture}
+% \end{tikzpicture}
 
-\begin{tikzpicture}
-    \initdiagram
-    \def\columndistance{5}
+% \begin{tikzpicture}
+%     \initdiagram
+%     \def\columndistance{5}
 
-    \def\electroncolor{brown}
-    \overlapp{7.5/{4s/}}{0.5/{$\sigma$/pair},9.5/{$\sigma^*$/}}{2.0/{LGO/pair,/pair,/pair,/pair,/pair,/pair}}%a1g
-    \overlapp{9.0/{4p/,/,/}}{1.5/{$\sigma$/pair,/pair,/pair},10/{$\sigma^*$/,/,/}}{2.0/{,,,,,}}%t1u
-    \overlapp{5.0/{3d/,/,/,/,/}}{1.0/{$\pi$/pair,/},6.5/{$\pi^*$/,/}}{2.0/{,,,,,}}%eg
-    \def\electroncolor{red}
-    \overlapp{5.0/{,,,,}}{5.0/{$t_{2g}$/pair,/,/}}{}%t2g
+%     \def\electroncolor{brown}
+%     \overlapp{7.5/{4s/}}{0.5/{$\sigma$/pair},9.5/{$\sigma^*$/}}{2.0/{LGO/pair,/pair,/pair,/pair,/pair,/pair}}%a1g
+%     \overlapp{9.0/{4p/,/,/}}{1.5/{$\sigma$/pair,/pair,/pair},10/{$\sigma^*$/,/,/}}{2.0/{,,,,,}}%t1u
+%     \overlapp{5.0/{3d/,/,/,/,/}}{1.0/{$\pi$/pair,/},6.5/{$\pi^*$/,/}}{2.0/{,,,,,}}%eg
+%     \def\electroncolor{red}
+%     \overlapp{5.0/{,,,,}}{5.0/{$t_{2g}$/pair,/,/}}{}%t2g
 
-\end{tikzpicture}
+% \end{tikzpicture}
 
 
-\begin{tikzpicture}
-    \initdiagram
-    \def\columndistance{3}
+% \begin{tikzpicture}
+%     \initdiagram
+%     \def\columndistance{3}
 
-    \def\diagrammode{compact}
-    \def\electroncolor{red}
-    \overlapp{-0.5/{2s/leer},2/{2p/leer,2p/leer,2p/leer}}{-3/{$\sigma$/pair},6/{$\sigma^*$/leer},1/{/pair}}{3/{LGO/pair,LGO/pair}}%a1
-    \overlapp{2/{,,}}{4/{$\pi^*$/leer},-1/{$\pi$/pair}}{3/{,}}%b1
-    \overlapp{2/{,,}}{2/{nb/leer}}{}%b2
+%     \def\diagrammode{compact}
+%     \def\electroncolor{red}
+%     \overlapp{-0.5/{2s/leer},2/{2p/leer,2p/leer,2p/leer}}{-3/{$\sigma$/pair},6/{$\sigma^*$/leer},1/{/pair}}{3/{LGO/pair,LGO/pair}}%a1
+%     \overlapp{2/{,,}}{4/{$\pi^*$/leer},-1/{$\pi$/pair}}{3/{,}}%b1
+%     \overlapp{2/{,,}}{2/{nb/leer}}{}%b2
 
-    \addlabel{Sauerstoff,MO,Wasserstoff}{0}
-    \addenergyscale{0}
-    \showenergydifference{1,2}{middle}{1}{$\Delta_O$}
+%     \addlabel{Sauerstoff,MO,Wasserstoff}{0}
+%     \addenergyscale{0}
+%     \showenergydifference{1,2}{middle}{1}{$\Delta_O$}
 
-\end{tikzpicture}
+% \end{tikzpicture}
 
-\begin{figure}
-    \centering
-    \begin{mohelper}
-        \initdiagram
-        \def\diagrammode{compact}
-        \degenerate{4}{gfys/up,/empty}{left}
-        \degenerate{5}{fck/empty}{left}
-        \degenerate{0}{text/empty}{middle}
-        \degenerate{0}{text/empty}{right}
-        \connectorbital{4}{2}{0}{1}{left}
-        \connectorbital{0}{1}{0}{1}{right}
-    \end{mohelper}
-    \caption{test diagram}
-    \label{fig:mo1}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \begin{mohelper}
+%         \initdiagram
+%         \def\diagrammode{compact}
+%         \degenerate{4}{gfys/up,/empty}{left}
+%         \degenerate{5}{fck/empty}{left}
+%         \degenerate{0}{text/empty}{middle}
+%         \degenerate{0}{text/empty}{right}
+%         \connectorbital{4}{2}{0}{1}{left}
+%         \connectorbital{0}{1}{0}{1}{right}
+%     \end{mohelper}
+%     \caption{test diagram}
+%     \label{fig:mo1}
+% \end{figure}
 
-\begin{figure}
-    \centering
-    \begin{mohelper}
-        \def\columndistance{3}
-        \def\diagrammode{compact}
-        \degenerate{0}{3d/empty,/empty,/empty,/empty,/empty}{left}
-        \degenerate{3}{4s/empty}{left}
-        \degenerate{4.5}{4p/empty,/empty,/empty}{left}
-        \degenerate{0}{/empty,/empty,/empty}{middle}
-        \degenerate{-4}{/empty}{middle}
-        \degenerate{6}{/empty}{middle}
-        \degenerate{-3}{/empty,/empty,/empty}{middle}
-        \degenerate{6.5}{/empty,/empty,/empty}{middle}
-        \degenerate{-2}{/empty,/empty}{middle}
-        \degenerate{1}{/empty,/empty}{middle}
-        \degenerate{-1}{LGO/empty,/empty,/empty,/empty,/empty,/empty}{right}
-        \connectorbital{0}{5}{0}{3}{left}
-        \connectorbital{0}{5}{-2}{2}{left}
-        \connectorbital{0}{5}{1}{2}{left}
-        \connectorbital{-2}{2}{-1}{6}{right}
-        \connectorbital{1}{2}{-1}{6}{right}
-        \connectorbital{3}{1}{-4}{1}{left}
-        \connectorbital{3}{1}{6}{1}{left}
-        \connectorbital{-4}{1}{-1}{6}{right}
-        \connectorbital{6}{1}{-1}{6}{right}
-        \connectorbital{4.5}{3}{-3}{3}{left}
-        \connectorbital{4.5}{3}{6.5}{3}{left}
-        \connectorbital{-3}{3}{-1}{6}{right}
-        \connectorbital{6.5}{3}{-1}{6}{right}
-        \addlabel{$Me^{n+}$,,6L}{0}
-        \addenergyscale{0}
-    \end{mohelper}
-    \caption{octahedral complex}
-    \label{fig:modiagram1}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \begin{mohelper}
+%         \def\columndistance{3}
+%         \def\diagrammode{compact}
+%         \degenerate{0}{3d/empty,/empty,/empty,/empty,/empty}{left}
+%         \degenerate{3}{4s/empty}{left}
+%         \degenerate{4.5}{4p/empty,/empty,/empty}{left}
+%         \degenerate{0}{/empty,/empty,/empty}{middle}
+%         \degenerate{-4}{/empty}{middle}
+%         \degenerate{6}{/empty}{middle}
+%         \degenerate{-3}{/empty,/empty,/empty}{middle}
+%         \degenerate{6.5}{/empty,/empty,/empty}{middle}
+%         \degenerate{-2}{/empty,/empty}{middle}
+%         \degenerate{1}{/empty,/empty}{middle}
+%         \degenerate{-1}{LGO/empty,/empty,/empty,/empty,/empty,/empty}{right}
+%         \connectorbital{0}{5}{0}{3}{left}
+%         \connectorbital{0}{5}{-2}{2}{left}
+%         \connectorbital{0}{5}{1}{2}{left}
+%         \connectorbital{-2}{2}{-1}{6}{right}
+%         \connectorbital{1}{2}{-1}{6}{right}
+%         \connectorbital{3}{1}{-4}{1}{left}
+%         \connectorbital{3}{1}{6}{1}{left}
+%         \connectorbital{-4}{1}{-1}{6}{right}
+%         \connectorbital{6}{1}{-1}{6}{right}
+%         \connectorbital{4.5}{3}{-3}{3}{left}
+%         \connectorbital{4.5}{3}{6.5}{3}{left}
+%         \connectorbital{-3}{3}{-1}{6}{right}
+%         \connectorbital{6.5}{3}{-1}{6}{right}
+%         \addlabel{$Me^{n+}$,,6L}{0}
+%         \addenergyscale{0}
+%     \end{mohelper}
+%     \caption{octahedral complex}
+%     \label{fig:modiagram1}
+% \end{figure}
 
-\begin{figure}
-    \centering
-    \begin{mohelper}[scale=0.8] % scale it to 0.8 of original size to fit on page
-        \def\columndistance{5.4} % set column distance to 5.4
-        \def\diagrammode{normal} % draw in normal mode
-        \degenerate{0}{/pair,/pair,3d/pair,/up,/up}{left}
-        \degenerate{3}{4s/empty}{left}
-        \degenerate{4.5}{/empty,4p/empty,/empty}{left}
-        \def\electroncolor{brown} % change color for t2g
-        \degenerate{0}{/pair,/pair,/pair}{middle}
-        \def\electroncolor{black} % change color back for rest
-        \degenerate{-4}{/pair}{middle}
-        \degenerate{6}{/empty}{middle}
-        \degenerate{-3}{/pair,/pair,/pair}{middle}
-        \degenerate{6.5}{/empty,/empty,/empty}{middle}
-        \degenerate{-2}{/pair,/pair}{middle}
-        \def\electroncolor{brown} % change color for eg*
-        \degenerate{1}{/up,/up}{middle}
-        \def\electroncolor{black} % change color back for rest
-        \degenerate{-1}{/pair,/pair,/pair,/pair,/pair,/pair}{right}
-        \connectorbital{0}{5}{0}{3}{left}
-        \connectorbital{0}{5}{-2}{2}{left}
-        \connectorbital{0}{5}{1}{2}{left}
-        \connectorbital{-2}{2}{-1}{6}{right}
-        \connectorbital{1}{2}{-1}{6}{right}
-        \connectorbital{3}{1}{-4}{1}{left}
-        \connectorbital{3}{1}{6}{1}{left}
-        \connectorbital{-4}{1}{-1}{6}{right}
-        \connectorbital{6}{1}{-1}{6}{right}
-        \connectorbital{4.5}{3}{-3}{3}{left}
-        \connectorbital{4.5}{3}{6.5}{3}{left}
-        \connectorbital{-3}{3}{-1}{6}{right}
-        \connectorbital{6.5}{3}{-1}{6}{right}
-        \addlabel{$Ni^{2+}$,,$6 \times H_2O$}{0} % draw labels
-        \addenergyscale{0} % add the energy scale
-        \showenergydifference{0,1}{middle}{1.5}{$\Delta_O$} % show ligand field splitting
+% \begin{figure}
+%     \centering
+%     \begin{mohelper}[scale=0.8] % scale it to 0.8 of original size to fit on page
+%         \def\columndistance{5.4} % set column distance to 5.4
+%         \def\diagrammode{normal} % draw in normal mode
+%         \degenerate{0}{/pair,/pair,3d/pair,/up,/up}{left}
+%         \degenerate{3}{4s/empty}{left}
+%         \degenerate{4.5}{/empty,4p/empty,/empty}{left}
+%         \def\electroncolor{brown} % change color for t2g
+%         \degenerate{0}{/pair,/pair,/pair}{middle}
+%         \def\electroncolor{black} % change color back for rest
+%         \degenerate{-4}{/pair}{middle}
+%         \degenerate{6}{/empty}{middle}
+%         \degenerate{-3}{/pair,/pair,/pair}{middle}
+%         \degenerate{6.5}{/empty,/empty,/empty}{middle}
+%         \degenerate{-2}{/pair,/pair}{middle}
+%         \def\electroncolor{brown} % change color for eg*
+%         \degenerate{1}{/up,/up}{middle}
+%         \def\electroncolor{black} % change color back for rest
+%         \degenerate{-1}{/pair,/pair,/pair,/pair,/pair,/pair}{right}
+%         \connectorbital{0}{5}{0}{3}{left}
+%         \connectorbital{0}{5}{-2}{2}{left}
+%         \connectorbital{0}{5}{1}{2}{left}
+%         \connectorbital{-2}{2}{-1}{6}{right}
+%         \connectorbital{1}{2}{-1}{6}{right}
+%         \connectorbital{3}{1}{-4}{1}{left}
+%         \connectorbital{3}{1}{6}{1}{left}
+%         \connectorbital{-4}{1}{-1}{6}{right}
+%         \connectorbital{6}{1}{-1}{6}{right}
+%         \connectorbital{4.5}{3}{-3}{3}{left}
+%         \connectorbital{4.5}{3}{6.5}{3}{left}
+%         \connectorbital{-3}{3}{-1}{6}{right}
+%         \connectorbital{6.5}{3}{-1}{6}{right}
+%         \addlabel{$Ni^{2+}$,,$6 \times H_2O$}{0} % draw labels
+%         \addenergyscale{0} % add the energy scale
+%         \showenergydifference{0,1}{middle}{1.5}{$\Delta_O$} % show ligand field splitting
 
-        \degeneratelabel{6.5}{3}{middle}{right}{$\color{blue}{2t_{1u}^*}$}
-        \degeneratelabel{6}{1}{middle}{right}{$\color{blue}{2a_{1g}^*}$}
-        \degeneratelabel{1}{2}{middle}{right}{$\color{blue}{2e_g^*}$}
-        \degeneratelabel{0}{3}{middle}{right}{$\color{blue}{1t_{2g}}$}
-        \degeneratelabel{-2}{2}{middle}{right}{$\color{blue}{1e_g}$}
-        \degeneratelabel{-3}{3}{middle}{right}{$\color{blue}{1t_{1u}}$}
-        \degeneratelabel{-4}{1}{middle}{right}{$\color{blue}{1a_{1g}}$}
-    \end{mohelper}
-    \caption{$[Ni(H_2O)_6]^{2+}$ complex}
-    \label{fig:modiagram3}
-\end{figure}
+%         \degeneratelabel{6.5}{3}{middle}{right}{$\color{blue}{2t_{1u}^*}$}
+%         \degeneratelabel{6}{1}{middle}{right}{$\color{blue}{2a_{1g}^*}$}
+%         \degeneratelabel{1}{2}{middle}{right}{$\color{blue}{2e_g^*}$}
+%         \degeneratelabel{0}{3}{middle}{right}{$\color{blue}{1t_{2g}}$}
+%         \degeneratelabel{-2}{2}{middle}{right}{$\color{blue}{1e_g}$}
+%         \degeneratelabel{-3}{3}{middle}{right}{$\color{blue}{1t_{1u}}$}
+%         \degeneratelabel{-4}{1}{middle}{right}{$\color{blue}{1a_{1g}}$}
+%     \end{mohelper}
+%     \caption{$[Ni(H_2O)_6]^{2+}$ complex}
+%     \label{fig:modiagram3}
+% \end{figure}
 
 \begin{figure}
     \centering
     \begin{mohelper}
         \def\columndistance{3}
         \def\diagrammode{normal}
-        \degenerate{0}{3d/empty,/empty,/empty,/empty,/empty}{middle}
 
         \addOrbital{energy=4}
-        \addOrbital{config=down,sym={a1,t2g}}
-        \addOrbital{energy=4,config=down,sym=a1,side=middle}
-        \addOrbital{energy=8,config=down,sym=a1,side=right}
-        \addOrbital{energy=2,config={up,down,pair,down},labels={hey,,nice,to}}
-
-        \fragment{right}{
-            \addOrbital{config=down,sym={g},label=drek}
+        \addOrbital{config=down,sym={a1,t2g},column=1}
+        \addOrbital{energy=4,config=down,sym=a1}
+        \addOrbital{energy=2,config={up,down,pair,down},labels={hey,,nice,to},label=Scheise,labelposition=top,sym=t2g,column=2}
+        % \connectfurther{4}{1}{0}{1}{0}
+        % \connectfurther{0}{1}{2}{4}{1}
+        \fragment{}{
+            \addOrbital{energy=-1,config=down,sym=a1}
         }
-
-        \autoconnect
+        \fragment{
+            \addOrbital{energy=-1,config=down,sym=a1}
+        }
+        \fragment{
+            \addOrbital{energy=-1,config=down,sym=a1}
+        }
+        \fragment{
+            \addOrbital{energy=-1,config=down,sym=a1}
+        }
+        \drawliness
     \end{mohelper}
     \label{fig:modiagram8}
 \end{figure}
