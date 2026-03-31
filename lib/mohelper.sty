@@ -364,26 +364,51 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
 % 3: zugehörigkeit: left right middle
 \newcommand{\degenerate}[3]{
 
-    % \StrCount{#2}{,}[\arrlength]
-    % \foreach \name/\spin [count=\i] in {#2}{
-    %         \ifstrequal{#3}{left}{\def\xposs{0}}{}
-    %         \ifstrequal{#3}{middle}{\def\xposs{\orbit@llength+\columndistance}}{}
-    %         \ifstrequal{#3}{right}{\def\xposs{\orbit@llength*2+\columndistance*2}}{}
-    %         % \def\xpos{\xposs-\orbit@llength-\orbit@ldistance}
+    % \ifdefstring{\diagrammode}{compact}{
+    %     \def\func{\degeneratecorrectedcompact}%
+    % }{\def\func{\degeneratecorrected}}%
+    % \func{#1}{#2}{#3}%
 
-    %         \pgfmathsetmacro{\xpos}{\xposs - (\orbit@llength + \orbit@ldistance) * \arrlength /2 + (\i - 1) * (\orbit@llength + \orbit@ldistance)}
+    \StrCount{#2}{,}[\arrcount]%
+    \pgfmathsetmacro{\arrlength}{int(\arrcount + 1)}%
 
-    %         \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\name}{\spin}}
-    %         \tempcall
-    %     }
-    \ifdefstring{\diagrammode}{compact}{
-        \def\func{\degeneratecorrectedcompact}%
-    }{\def\func{\degeneratecorrected}}%
-    \func{#1}{#2}{#3}%
+    \c@lculateColumnX{\xposs}{#3}
 
+    \def\currentIdx{0}%
+
+    \renewcommand*{\do}[1]{% 
+
+        \StrBefore{##1}{/}[\tempName]%
+        \StrBehind{##1}{/}[\tempSpin]%
+
+        \ifdefstring{\diagrammode}{compact}{
+            \pgfmathsetmacro{\ypos}{#1 - ((\orbit@ldistance) * (\arrlength - 1)) / 2 + (\currentIdx) * (\orbit@ldistance)}%
+        }{
+            \pgfmathsetmacro{\xpos}{\xposs - ((\orbit@llength + \orbit@ldistance) * (\arrlength - 1)) / 2 + (\currentIdx) * (\orbit@llength + \orbit@ldistance)}%
+        }%
+
+
+        \ifcase\currentIdx
+        \else
+            \def\tempName{}
+        \fi
+        \ifdefstring{\diagrammode}{compact}{
+
+            \edef\tempcall{\noexpand\orbital{\xposs}{\ypos}{\tempName}{\tempSpin}}
+        }{
+            \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\tempName}{\tempSpin}}
+        }%
+        \tempcall
+
+        \pgfmathsetmacro{\nextIdx}{int(\currentIdx + 1)}%
+        \xdef\currentIdx{\nextIdx}%
+    }%
+
+    % now finally expanding the text
+    \expandafter\docsvlist\expandafter{#2}%
 }
 \DeclareListParser{\myCSVsplitter}{,}
-% NUR normaler modus
+% draw orbitals in normal mode
 \newcommand{\degeneratecorrected}[3]{%
     % 1. Anzahl für Zentrierung berechnen
     \StrCount{#2}{,}[\arrcount]%
@@ -422,37 +447,24 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
         \xdef\currentIdx{\nextIdx}%
     }%
 
-    % JETZT der Aufruf, der den Text endlich aufbricht:
+    % now finally expanding the text
     \expandafter\docsvlist\expandafter{#2}%
 }
-% NUR kompakter modus
+% draw orbitals in compact mode
 \newcommand{\degeneratecorrectedcompact}[3]{%
-    % 1. Anzahl für Zentrierung berechnen
+
     \StrCount{#2}{,}[\arrcount]%
     \pgfmathsetmacro{\arrlength}{int(\arrcount + 1)}%
 
-    % 2. X-Basis bestimmen
-    % \edef\side{#3}
-    % \ifdefstring{\side}{left}{\def\xposs{0}}{}%
-    % \ifdefstring{\side}{middle}{\def\xposs{\orbit@llength+\columndistance}}{}%
-    % \ifdefstring{\side}{right}{\def\xposs{\orbit@llength*2+\columndistance*2}}{}%
-
     \c@lculateColumnX{\xposs}{#3}
 
-    % 3. Der "Text-Splitter" von etoolbox
-    % Wir definieren eine Zählvariable für die Position
     \def\currentIdx{0}%
 
-    % Dieser Befehl geht durch JEDES Element einer Komma-Liste, 
-    % egal ob sie als Text oder Makro kommt.
-    % \DeclareListParser{\myCSVsplitter}{,}%
     \renewcommand*{\do}[1]{% 
-        % #1 ist jetzt z.B. "v/pair"
-        % Wir spalten den Schrägstrich mit xstring
+
         \StrBefore{##1}{/}[\tempName]%
         \StrBehind{##1}{/}[\tempSpin]%
 
-        % X-Position berechnen
         \pgfmathsetmacro{\ypos}{#1 - ((\orbit@ldistance) * (\arrlength - 1)) / 2 + (\currentIdx) * (\orbit@ldistance)}%
 
         \ifcase\currentIdx
@@ -460,45 +472,18 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
             \def\tempName{}
         \fi
 
-        % Orbital zeichnen
-        % \orbital{\xpos}{#1}{\tempName}{\tempSpin}%
         \edef\tempcall{\noexpand\orbital{\xposs}{\ypos}{\tempName}{\tempSpin}}
         \tempcall
 
-        % Index erhöhen
         \pgfmathsetmacro{\nextIdx}{int(\currentIdx + 1)}%
         \xdef\currentIdx{\nextIdx}%
     }%
 
-    % JETZT der Aufruf, der den Text endlich aufbricht:
+    % now finally expanding the text
     \expandafter\docsvlist\expandafter{#2}%
 }
 
-\newcommand{\connecttriple}[1]{
-    \foreach \a/\b/\c/\d/\e/\f [count=\i] in {#1}{
-
-
-
-            \pgfmathsetmacro{\xposleft}{\orbit@llength /2 + (\orbit@llength * \b + \orbit@ldistance * (\b - 1)) /2}
-            \pgfmathsetmacro{\xposmiddleleft}{(\orbit@llength + \columndistance) +\orbit@llength /2 - (\orbit@llength * \d + \orbit@ldistance * (\d - 1)) /2}
-            \pgfmathsetmacro{\xposmiddleright}{(\orbit@llength + \columndistance)  + + \orbit@llength /2+ (\orbit@llength * \d + \orbit@ldistance * (\d - 1)) /2}
-            \pgfmathsetmacro{\xposright}{(\orbit@llength + \columndistance)*2 + \orbit@llength /2 - (\orbit@llength * \f + \orbit@ldistance * (\f - 1)) /2}
-
-            % \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\name}{\spin}}
-            % \tempcall
-            \ifcase\b
-
-            \else
-                \draw[dashed, thin, gray] (\xposleft,\a) -- (\xposmiddleleft,\c);
-            \fi
-            \ifcase\f
-
-            \else
-                \draw[dashed, thin, gray] (\xposmiddleright,\c) -- (\xposright,\e);
-            \fi
-        }
-}
-
+% Deprecated
 \newcommand{\sliptogether}[6]{
 
     \pgfmathsetmacro{\xposleft}{\orbit@llength /2 + (\orbit@llength * #2 + \orbit@ldistance * (#2 - 1)) /2}
@@ -506,8 +491,6 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
     \pgfmathsetmacro{\xposmiddleright}{(\orbit@llength + \columndistance)  + + \orbit@llength /2+ (\orbit@llength * #4 + \orbit@ldistance * (#4 - 1)) /2}
     \pgfmathsetmacro{\xposright}{(\orbit@llength + \columndistance)*2 + \orbit@llength /2 - (\orbit@llength * #6 + \orbit@ldistance * (#6 - 1)) /2}
 
-    % \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\name}{\spin}}
-    % \tempcall
     \ifcase#2
 
     \else
@@ -539,7 +522,12 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
 
 }
 
+% Deprecated
 \newcommand{\connectorbital}[5]{
+    \PackageWarningNoLine{mohelper}{%
+        \noexpand\connectorbital is obsolete and might get removed in future versions of the package.\MessageBreak
+        Please use \noexpand\fragment{...} instead. See the manual for further information on how to use the new system.%
+    }%
     \ifstrequal{#5}{left}{
         \ifdefstring{\diagrammode}{compact}{
             \sliptogether{#1}{1}{#3}{1}{0}{0}%
@@ -557,18 +545,23 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
 
 \newcommand{\overlapp}[3]{%
 
+    \PackageWarningNoLine{mohelper}{%
+        \noexpand\overlapp is obsolete and might get removed in future versions of the package.\MessageBreak
+        Please use \noexpand\fragment{...} instead. See the manual for further information on how to use the new system.%
+    }%
+
     \ifdefstring{\diagrammode}{compact}{
         \def\func{\degeneratecorrectedcompact}%
     }{\def\func{\degeneratecorrected}}%
 
     \foreach \orbs/\elecs in {#1}{%
-            \func{\orbs}{\elecs}{left}%
+            \func{\orbs}{\elecs}{0}%
         }
     \foreach \orbs/\elecs in {#2}{%
-            \func{\orbs}{\elecs}{middle}%
+            \func{\orbs}{\elecs}{1}%
         }
     \foreach \orbs/\elecs in {#3}{%
-            \func{\orbs}{\elecs}{right}%
+            \func{\orbs}{\elecs}{2}%
         }
 
     \foreach \atomorbitalone/\elecsleft in {#1}{%
