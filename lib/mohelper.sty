@@ -48,7 +48,8 @@
 
 \newcommand{\fragment}[1]{
     \addtocounter{c@lumns}{1}
-    \def\cs{\csname orbit@list\thec@lumns\endcsname}{}
+    % \def\cs{\csname orbit@list\thec@lumns\endcsname}{}
+    \csgdef{orbit@list\thec@lumns}{}
     \xdef\@tomside{\thec@lumns}
     #1
     % \ifdefined#2
