@@ -174,11 +174,11 @@
     \pgfmathsetmacro{#1}{(\orbit@llength + \columndistance) * #2}
 }
 
-\newcommand{\addenergyscale}[1]{
+\newcommand{\addEnergyScale}[1]{
 \draw[->, -{Stealth[scale=1.2]}, semithick] (\minX-0.5-#1,\minY-0.5) -- (\minX-0.5-#1,\maxY+0.5) node[anchor=east, font=\footnotesize] {E};
 }
 
-\newcommand{\showenergydifference}[3]{
+\newcommand{\showEnergyDifference}[3]{
 \c@lculateColumnX{\xcolumn}{#2}
 \StrBefore{#1}{,}[\orbup]%
 \StrBehind{#1}{,}[\orbdown]%
