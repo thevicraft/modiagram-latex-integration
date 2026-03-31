@@ -350,11 +350,11 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
         }%
 
 
-        \ifcase\currentIdx
-        \else
-            \def\tempName{}
-        \fi
         \ifdefstring{\diagrammode}{compact}{
+            \ifcase\currentIdx
+            \else
+                \def\tempName{}
+            \fi
 
             \edef\tempcall{\noexpand\orbital{\xposs}{\ypos}{\tempName}{\tempSpin}}
         }{
