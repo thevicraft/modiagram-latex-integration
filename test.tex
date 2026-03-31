@@ -7,7 +7,6 @@
 \usepackage{color}
 
 \input{./lib/mohelper.sty}
-\input{./lib/orbitals.tex}
 
 \title{MO Diagram Integration for LaTeX}
 \author{thevicraft}
@@ -193,22 +192,24 @@ some text.
         \addOrbital{energy=4}
         \addOrbital{config=down,sym={a1,t2g},column=1}
         \addOrbital{energy=4,config=down,sym=a1}
-        \addOrbital{energy=2,config={up,down,pair,down},labels={hey,,nice,to},label=Scheise,labelposition=top,sym=t2g,column=2}
+        \addOrbital{energy=2,config={up,down,pair,down,},labels={hey,,nice,to},label=Scheise,labelposition=top,sym=t2g,column=2}
         % \connectfurther{4}{1}{0}{1}{0}
         % \connectfurther{0}{1}{2}{4}{1}
-        \fragment{}{
-            \addOrbital{energy=-1,config=down,sym=a1}
+        \fragment{
+            \addOrbital{energy=-3,config=down,sym=a1}
+        }
+        \fragment{
+            \addOrbital{energy=-1,config=down,sym=a1,label={$\color{blue}{1a_{1g}}$},labelposition=right}
+            \showenergydifference{-1,0}{0}{$\Delta_O$}
         }
         \fragment{
             \addOrbital{energy=-1,config=down,sym=a1}
+            \showenergydifference{0,2}{0}{$\Delta_T$}
         }
         \fragment{
-            \addOrbital{energy=-1,config=down,sym=a1}
+            \addOrbital{energy=-1,config=down,sym=t2g}
         }
-        \fragment{
-            \addOrbital{energy=-1,config=down,sym=a1}
-        }
-        \drawliness
+        \addenergyscale{0}
     \end{mohelper}
     \label{fig:modiagram8}
 \end{figure}

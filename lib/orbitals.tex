@@ -3,14 +3,6 @@
 \usepackage{xstring}
 % \input{./lib/mohelper.sty}
 
-\pgfkeys{
-    /mohelper/.cd,
-    energy/.default=0,
-    sym/.default=a1,
-    deg/.default=1,
-    config/.default=9
-}
-
 \makeatletter % Erlaubt @ in Namen für interne Befehle
 % \def\cs{\orbit@listleft}{}
 % \def\cs{\orbit@listmiddle}{}
@@ -27,10 +19,8 @@
     #1
 }
 
-\newcommand{\addLabel}[1]{}
-
 \newcommand{\addOrbital}[1]{
-    \pgfkeys{/mohelper/.cd,
+    \pgfkeys{/mohelper/orbitals/.cd,
         energy/.store in=\tempEnergy,
         energy=0,
         sym/.store in=\tempSym,
@@ -78,9 +68,6 @@
         \listcsxadd{orbit@list\tempSide}{\group/\tempEnergy/\tempDeg}
     }
 
-
-
-
     % \expandafter\typeout\expandafter{\csname orbit@listleft\endcsname}
 }
 
@@ -95,36 +82,6 @@
         {\xdef#2{#2,##1}}% Weitere Elemente mit Komma
     }%
     \dolistcsloop{#1}%
-}
-
-\newcommand{\autoconnect}{
-
-    \cslisttoarray{orbit@listleft}{\arrayLeft}
-    \cslisttoarray{orbit@listmiddle}{\arrayMiddle}
-    \cslisttoarray{orbit@listright}{\arrayRight}
-
-    \foreach \symmetry/\energy/\deg in \arrayLeft{
-
-        \foreach \symmetryy/\energyy/\degy in \arrayMiddle{
-
-            \ifdefequal{\symmetry}{\symmetryy}{
-                \connectorbital{\energy}{\deg}{\energyy}{\degy}{left}
-            }{}
-
-        }
-    }
-    \foreach \symmetry/\energy/\deg in \arrayMiddle{
-
-        \foreach \symmetryy/\energyy/\degy in \arrayRight{
-
-            \ifdefequal{\symmetry}{\symmetryy}{
-                \connectorbital{\energy}{\deg}{\energyy}{\degy}{right}
-            }{}
-
-        }
-    }
-
-
 }
 
 \newcommand{\drawliness}{

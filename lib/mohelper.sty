@@ -16,26 +16,156 @@
 %     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 % \NeedsTeXFormat{LaTeX2e}
-% \ProvidesPackage{modiagram-latex-integration}[2026/03/24 Enhanced MO Diagram Creator]
+% \ProvidesPackage{mohelper}[2026/03/24 Enhanced MO Diagram Creator]
 
 \RequirePackage{tikz, xstring}
 \RequirePackage{etoolbox}
 
 \usetikzlibrary{arrows.meta}
 
-% Definition der Umgebung
+\usetikzlibrary{backgrounds}
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main} % Reihenfolge von unten nach oben
+
+% DEFINING THE WORKING ENVIRONMENT AND DEALING WITH USER INPUT
+
+\makeatletter
+
 \newenvironment{mohelper}[1][]{%
     % Code, der beim START ausgeführt wird (\begin{mohelper})
     \begin{tikzpicture}[#1] % Erlaubt zusätzliche TikZ-Optionen
+        \setcounter{c@lumns}{-1}
         \initdiagram
         }{%
         % Code, der am ENDE ausgeführt wird (\end{mohelper})
+        \finishjob
     \end{tikzpicture}
 }
 
 
-\newcommand{\orbitallength}{0.8}
-\newcommand{\orbitaldistance}{0.2}
+\xdef\@tomside{0}
+
+\newcounter{c@lumns}
+\setcounter{c@lumns}{-1}
+
+\newcommand{\fragment}[1]{
+    \addtocounter{c@lumns}{1}
+    \def\cs{\csname orbit@list\thec@lumns\endcsname}{}
+    \xdef\@tomside{\thec@lumns}
+    #1
+    % \ifdefined#2
+    %     \addenergyscale{0}
+    % \fi
+}
+
+\newcommand{\addOrbital}[1]{
+    \pgfkeys{/mohelper/orbitals/.cd,
+        energy/.store in=\tempEnergy,
+        energy=0,
+        sym/.store in=\tempSym,
+        sym=a1,
+        config/.store in=\tempConfig,
+        config={empty},
+        labels/.store in=\tempLabels,
+        labels={},
+        label/.store in=\tempLabel,
+        label=,
+        labelposition/.store in=\tempLabelPosition,
+        labelposition=bottom,
+        column/.store in=\tempSide,
+        column=\@tomside,
+        #1
+    } % handle user input
+
+    \xdef\merg@dstring{}
+    \foreach \spin [count=\ione] in \tempConfig {
+        \edef\labelorbital{}
+        \foreach \ee [count=\itwo] in \tempLabels {
+            \ifdefequal{\ione}{\itwo}{
+                \xdef\labelorbital{\ee}
+            }{}
+        }
+        \ifdefempty{\merg@dstring}{
+            % Erster Eintrag: Kein Komma davor
+            \xdef\merg@dstring{\labelorbital/\spin}
+        }{
+            % Alle weiteren Einträge: Mit Komma trennen
+            \xdef\merg@dstring{\merg@dstring,\labelorbital/\spin}
+        }
+    }
+    \StrCount{\tempConfig}{,}[\arrcount]%
+    \pgfmathsetmacro{\tempDeg}{int(\arrcount + 1)}%
+
+    \degenerate{\tempEnergy}{\merg@dstring}{\tempSide}
+
+    \degener@telabel{\tempEnergy}{\tempDeg}{\tempSide}{\tempLabelPosition}{\tempLabel}
+
+    \foreach \group in \tempSym {
+
+        \listcsxadd{orbit@list\tempSide}{\group/\tempEnergy/\tempDeg}
+    }
+
+    % \expandafter\typeout\expandafter{\csname orbit@listleft\endcsname}
+}
+
+
+\newcommand{\cslistto@rray}[2]{%
+    % #1 = Name der Quelle (z.B. orbit@list@left)
+    % #2 = Name des Ziel-Makros (z.B. \myArray)
+    \xdef#2{}% Ziel leeren
+    \def\do##1{%
+        \ifdefempty{#2}
+        {\xdef#2{##1}}% Erstes Element
+        {\xdef#2{#2,##1}}% Weitere Elemente mit Komma
+    }%
+    \dolistcsloop{#1}%
+}
+
+% Connects orbitals of the same symmetry group together
+\newcommand{\finishjob}{
+    \ifcase\thec@lumns
+        \relax
+    \fi
+    \pgfmathsetmacro{\range}{int(\thec@lumns - 1)}
+    \foreach \i in {0,..., \range} {
+            \cslistto@rray{orbit@list\i}{\arrayLeft}
+            \pgfmathsetmacro{\ii}{int(\i + 1)}
+            \cslistto@rray{orbit@list\ii}{\arrayMiddle}
+
+            \foreach \symmetry/\energy/\deg in \arrayLeft{
+
+                \foreach \symmetryy/\energyy/\degy in \arrayMiddle{
+
+                    \ifdefequal{\symmetry}{\symmetryy}{
+
+                        \begin{pgfonlayer}{background}
+                            \connectfurther{\energy}{\deg}{\energyy}{\degy}{\i}
+                        \end{pgfonlayer}
+                    }{}
+
+                }
+            }
+        }
+
+
+
+    % \pgfmathsetmacro{\column}{\thec@lumns}
+    % \foreach \i in {0,..., \column} {
+    %         \cslistto@rray{orbit@list\i}{\currentColumn}
+
+    %         \foreach \symmetry/\energy/\deg/\labelpos/\label in \currentColumn{
+    %             \degener@telabel{\energy}{\deg}{\i}{\labelpos}\expandafter{\label}
+    %             % draw external labels
+    %         }
+    %     }
+}
+
+
+
+% FURTHER DRAWING LOGIC STUFF
+
+\newcommand{\orbit@llength}{0.8}
+\newcommand{\orbit@ldistance}{0.2}
 \newcommand{\columndistance}{3}
 \def\diagrammode{normal}
 \def\electroncolor{black}
@@ -47,57 +177,59 @@
     \xdef\maxY{-100}
 }
 
-\newcommand{\calculateColumnX}[2]{
-    \pgfmathsetmacro{#1}{(\orbitallength + \columndistance) * #2}
+\newcommand{\c@lculateColumnX}[2]{
+    \pgfmathsetmacro{#1}{(\orbit@llength + \columndistance) * #2}
 }
 
-\newcommand{\addlabel}[2]{
-    \foreach \name [count=\i] in {#1}{
-            \pgfmathsetmacro{\pos}{\orbitallength/2 + (\i - 1) * (\orbitallength + \columndistance)}
-            \node[below=0pt, font=\scriptsize] at (\pos,\minY-0.5-#2) {\name};
-        }
-}
 \newcommand{\addenergyscale}[1]{
 \draw[->, -{Stealth[scale=1.2]}, semithick] (\minX-0.5-#1,\minY-0.5) -- (\minX-0.5-#1,\maxY+0.5) node[anchor=east, font=\footnotesize] {E};
 }
 
-\newcommand{\showenergydifference}[4]{
+
+% hier auch mit c@lculateColumnX machen und dann aber anstelle des column wertes dieses \thec@lumns oder \tempSide machen, und auf 3 argumente reduzieren
+% danach mohelper.sty und orbitals.tex zusammenführen
+
+
+\newcommand{\showenergydifference}[3]{
+\c@lculateColumnX{\xcolumn}{#2}
 \StrBefore{#1}{,}[\orbup]%
 \StrBehind{#1}{,}[\orbdown]%
-\ifstrequal{#2}{left}{\pgfmathsetmacro{\xpos}{\orbitallength/2 + #3}}{}
-\ifstrequal{#2}{middle}{\pgfmathsetmacro{\xpos}{\orbitallength/2 + #3 + \orbitallength + \columndistance}}{}
-\ifstrequal{#2}{right}{\pgfmathsetmacro{\xpos}{\orbitallength/2 + #3 + 2 * (\orbitallength + \columndistance)}}{}
-\draw[<->, red, {Stealth[scale=0.7]}-{Stealth[scale=0.7]}, semithick] (\xpos,\orbdown) -- (\xpos,\orbup) node[midway, right, font=\footnotesize] {#4};
+\c@lculateColumnX{\xposs}{\thec@lumns}
+\pgfmathsetmacro{\xpos}{\orbit@llength/2 + #2 + \xposs}
+% \ifstrequal{#2}{left}{\pgfmathsetmacro{\xpos}{\orbit@llength/2 + #3}}{}
+% \ifstrequal{#2}{middle}{\pgfmathsetmacro{\xpos}{\orbit@llength/2 + #3 + \orbit@llength + \columndistance}}{}
+% \ifstrequal{#2}{right}{\pgfmathsetmacro{\xpos}{\orbit@llength/2 + #3 + 2 * (\orbit@llength + \columndistance)}}{}
+\draw[<->, red, {Stealth[scale=0.7]}-{Stealth[scale=0.7]}, semithick] (\xpos,\orbdown) -- (\xpos,\orbup) node[midway, right, font=\footnotesize] {#3};
 }
 % 1: energy
 % 2: degeneration
 % 3: side
 % 4: align
 % 5: textcontent
-\newcommand{\degeneratelabel}[5]{
+\newcommand{\degener@telabel}[5]{
 
     % \edef\side{#3}
     % \ifdefstring{\side}{left}{\def\xpos{0}}{}%
-    % \ifdefstring{\side}{middle}{\def\xpss{\orbitallength+\columndistance}}{}%
-    % \ifdefstring{\side}{right}{\def\xpos{\orbitallength*2+\columndistance*2}}{}%
-    \calculateColumnX{\xpos}{#3}
+    % \ifdefstring{\side}{middle}{\def\xpss{\orbit@llength+\columndistance}}{}%
+    % \ifdefstring{\side}{right}{\def\xpos{\orbit@llength*2+\columndistance*2}}{}%
+    \c@lculateColumnX{\xpos}{#3}
     % \ifstrequal{#3}{left}{\pgfmathsetmacro{\xpos}{0}}{}
-    % \ifstrequal{#3}{middle}{\pgfmathsetmacro{\xpos}{\orbitallength + \columndistance}}{}
-    % \ifstrequal{#3}{right}{\pgfmathsetmacro{\xpos}{2 * (\orbitallength + \columndistance)}}{}
+    % \ifstrequal{#3}{middle}{\pgfmathsetmacro{\xpos}{\orbit@llength + \columndistance}}{}
+    % \ifstrequal{#3}{right}{\pgfmathsetmacro{\xpos}{2 * (\orbit@llength + \columndistance)}}{}
 
     \ifdefstring{\diagrammode}{compact}{
-        \pgfmathsetmacro{\lengthkette}{\orbitallength}
+        \pgfmathsetmacro{\lengthkette}{\orbit@llength}
     }{
-        \pgfmathsetmacro{\lengthkette}{#2 * \orbitallength + (#2 - 1) * \orbitaldistance}
+        \pgfmathsetmacro{\lengthkette}{#2 * \orbit@llength + (#2 - 1) * \orbit@ldistance}
     }
-    % \pgfmathsetmacro{\offset}{\xpos + \orbitallength /2 + \lengthkette /2}
+    % \pgfmathsetmacro{\offset}{\xpos + \orbit@llength /2 + \lengthkette /2}
 
     \edef\labelalignment{#4}
     \ifdefstring{\labelalignment}{left}{
-        \node[anchor=east, font=\scriptsize] at (\xpos + \orbitallength /2 - \lengthkette /2,#1) {#5};
+        \node[anchor=east, font=\scriptsize] at (\xpos + \orbit@llength /2 - \lengthkette /2,#1) {#5};
     }{}
     \ifdefstring{\labelalignment}{right}{
-        \node[anchor=west, font=\scriptsize] at (\xpos + \orbitallength /2 + \lengthkette /2,#1) {#5};
+        \node[anchor=west, font=\scriptsize] at (\xpos + \orbit@llength /2 + \lengthkette /2,#1) {#5};
     }{}
     \ifdefstring{\labelalignment}{bottom}{
         \ifdefstring{\diagrammode}{compact}{
@@ -105,7 +237,7 @@
         }{
             \edef\labeldistance{7pt}
         }
-        \node[below=\labeldistance, font=\scriptsize] at (\xpos + \orbitallength /2,#1) {#5};
+        \node[below=\labeldistance, font=\scriptsize] at (\xpos + \orbit@llength /2,#1) {#5};
     }{}
     \ifdefstring{\labelalignment}{top}{
         \ifdefstring{\diagrammode}{compact}{
@@ -113,7 +245,7 @@
         }{
             \edef\labeldistance{7pt}
         }
-        \node[above=\labeldistance, font=\scriptsize] at (\xpos + \orbitallength /2,#1) {#5};
+        \node[above=\labeldistance, font=\scriptsize] at (\xpos + \orbit@llength /2,#1) {#5};
     }{}
 
 }
@@ -121,7 +253,7 @@
 % 1. Ein Befehl für ein einzelnes Orbital (eine Linie)
 % Syntax: \orbital(x,y){label}
 \newcommand{\orbital}[4]{
-    \draw[thick] (#1,#2) -- (#1+\orbitallength,#2);% node[below, font=\scriptsize] {#3};
+    \draw[thick] (#1,#2) -- (#1+\orbit@llength,#2);% node[below, font=\scriptsize] {#3};
     \ifstrequal{#4}{up}{\electronup{#1}{#2}}{}
     \ifstrequal{#4}{down}{\electrondown{#1}{#2}}{}
     \ifstrequal{#4}{pair}{\electronup{#1}{#2}\electrondown{#1}{#2}}{}
@@ -132,16 +264,16 @@
         \edef\labeldistance{7pt}
     }
 
-    \node[below=\labeldistance, font=\scriptsize] at (#1+\orbitallength/2,#2) {#3};
+    \node[below=\labeldistance, font=\scriptsize] at (#1+\orbit@llength/2,#2) {#3};
 
 
     % \pgfmathsetmacro{\minX}{min(\minX, #1)}%
-    % \pgfmathsetmacro{\maxX}{max(\maxX, \maxX + \orbitallength /2)}%
+    % \pgfmathsetmacro{\maxX}{max(\maxX, \maxX + \orbit@llength /2)}%
     % \pgfmathsetmacro{\minY}{min(\minY, #2)}%
     % \pgfmathsetmacro{\maxY}{max(\maxY, #2)}%
 
     \pgfmathsetmacro{\tempMinX}{min(\minX, #1)}
-    \pgfmathsetmacro{\tempMaxX}{max(\maxX, #1 + \orbitallength)} % Hier die volle Breite nehmen!
+    \pgfmathsetmacro{\tempMaxX}{max(\maxX, #1 + \orbit@llength)} % Hier die volle Breite nehmen!
     \pgfmathsetmacro{\tempMinY}{min(\minY, #2)}
     \pgfmathsetmacro{\tempMaxY}{max(\maxY, #2)}
 
@@ -154,7 +286,7 @@
 % 2. Ein Befehl für Verbindungslinien (gestrichelt)
 % Syntax: \connect(x1,y1)(x2,y2)
 \newcommand{\drawconnection}[4]{
-    \draw[dashed, thin, gray] (#1+\orbitallength,#2) -- (#3,#4);
+    \draw[dashed, thin, gray] (#1+\orbit@llength,#2) -- (#3,#4);
 }
 
 \tikzset{
@@ -164,7 +296,7 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
 
 \newcommand{\getelecspecs}{
     \ifdefstring{\diagrammode}{compact}{
-        \pgfmathsetmacro{\electronlength}{\orbitaldistance * 0.5}
+        \pgfmathsetmacro{\electronlength}{\orbit@ldistance * 0.5}
         % \edef\electroncolor{red}
         \edef\elecstyle{electroncompact}
     }{
@@ -196,8 +328,8 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
 \newcommand{\nondegenerate}[4]{
     % \newcommand{\xposition}{
     \ifstrequal{#3}{left}{\def\xpos{0}}{}
-    \ifstrequal{#3}{middle}{\def\xpos{\orbitallength+\columndistance}}{}
-    \ifstrequal{#3}{right}{\def\xpos{\orbitallength*2+\columndistance*2}}{}
+    \ifstrequal{#3}{middle}{\def\xpos{\orbit@llength+\columndistance}}{}
+    \ifstrequal{#3}{right}{\def\xpos{\orbit@llength*2+\columndistance*2}}{}
     % }
     \orbital{\xpos}{#1}{#2}{#4}
 }
@@ -205,24 +337,24 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
 \newcommand{\twicedegenerate}[6]{
     % \newcommand{\xposition}{
     \ifstrequal{#4}{left}{\def\xposs{0}}{}
-    \ifstrequal{#4}{middle}{\def\xposs{\orbitallength+\columndistance}}{}
-    \ifstrequal{#4}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}
+    \ifstrequal{#4}{middle}{\def\xposs{\orbit@llength+\columndistance}}{}
+    \ifstrequal{#4}{right}{\def\xposs{\orbit@llength*2+\columndistance*2}}{}
     % }
-    \def\xpos{\xposs-\orbitallength/2-\orbitaldistance/2}
+    \def\xpos{\xposs-\orbit@llength/2-\orbit@ldistance/2}
     \orbital{\xpos}{#1}{#2}{#5}
-    \orbital{\xpos+\orbitallength+\orbitaldistance}{#1}{#3}{#6}
+    \orbital{\xpos+\orbit@llength+\orbit@ldistance}{#1}{#3}{#6}
 }
 
 \newcommand{\tripledegenerate}[8]{
     % \newcommand{\xposition}{
     \ifstrequal{#5}{left}{\def\xposs{0}}{}
-    \ifstrequal{#5}{middle}{\def\xposs{\orbitallength+\columndistance}}{}
-    \ifstrequal{#5}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}
+    \ifstrequal{#5}{middle}{\def\xposs{\orbit@llength+\columndistance}}{}
+    \ifstrequal{#5}{right}{\def\xposs{\orbit@llength*2+\columndistance*2}}{}
     % }
-    \def\xpos{\xposs-\orbitallength-\orbitaldistance}
+    \def\xpos{\xposs-\orbit@llength-\orbit@ldistance}
     \orbital{\xpos}{#1}{#2}{#6}
-    \orbital{\xpos+\orbitallength+\orbitaldistance}{#1}{#3}{#7}
-    \orbital{\xpos+2*\orbitallength+2*\orbitaldistance}{#1}{#4}{#8}
+    \orbital{\xpos+\orbit@llength+\orbit@ldistance}{#1}{#3}{#7}
+    \orbital{\xpos+2*\orbit@llength+2*\orbit@ldistance}{#1}{#4}{#8}
 
 }
 
@@ -235,11 +367,11 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
     % \StrCount{#2}{,}[\arrlength]
     % \foreach \name/\spin [count=\i] in {#2}{
     %         \ifstrequal{#3}{left}{\def\xposs{0}}{}
-    %         \ifstrequal{#3}{middle}{\def\xposs{\orbitallength+\columndistance}}{}
-    %         \ifstrequal{#3}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}
-    %         % \def\xpos{\xposs-\orbitallength-\orbitaldistance}
+    %         \ifstrequal{#3}{middle}{\def\xposs{\orbit@llength+\columndistance}}{}
+    %         \ifstrequal{#3}{right}{\def\xposs{\orbit@llength*2+\columndistance*2}}{}
+    %         % \def\xpos{\xposs-\orbit@llength-\orbit@ldistance}
 
-    %         \pgfmathsetmacro{\xpos}{\xposs - (\orbitallength + \orbitaldistance) * \arrlength /2 + (\i - 1) * (\orbitallength + \orbitaldistance)}
+    %         \pgfmathsetmacro{\xpos}{\xposs - (\orbit@llength + \orbit@ldistance) * \arrlength /2 + (\i - 1) * (\orbit@llength + \orbit@ldistance)}
 
     %         \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\name}{\spin}}
     %         \tempcall
@@ -260,9 +392,9 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
     % 2. X-Basis bestimmen
     % \edef\side{#3}
     % \ifdefstring{\side}{left}{\def\xposs{0}}{}%
-    % \ifdefstring{\side}{middle}{\def\xposs{\orbitallength+\columndistance}}{}%
-    % \ifdefstring{\side}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}%
-    \calculateColumnX{\xposs}{#3}
+    % \ifdefstring{\side}{middle}{\def\xposs{\orbit@llength+\columndistance}}{}%
+    % \ifdefstring{\side}{right}{\def\xposs{\orbit@llength*2+\columndistance*2}}{}%
+    \c@lculateColumnX{\xposs}{#3}
 
     % 3. Der "Text-Splitter" von etoolbox
     % Wir definieren eine Zählvariable für die Position
@@ -278,7 +410,7 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
         \StrBehind{##1}{/}[\tempSpin]%
 
         % X-Position berechnen
-        \pgfmathsetmacro{\xpos}{\xposs - ((\orbitallength + \orbitaldistance) * (\arrlength - 1)) / 2 + (\currentIdx) * (\orbitallength + \orbitaldistance)}%
+        \pgfmathsetmacro{\xpos}{\xposs - ((\orbit@llength + \orbit@ldistance) * (\arrlength - 1)) / 2 + (\currentIdx) * (\orbit@llength + \orbit@ldistance)}%
 
         % Orbital zeichnen
         % \orbital{\xpos}{#1}{\tempName}{\tempSpin}%
@@ -302,10 +434,10 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
     % 2. X-Basis bestimmen
     % \edef\side{#3}
     % \ifdefstring{\side}{left}{\def\xposs{0}}{}%
-    % \ifdefstring{\side}{middle}{\def\xposs{\orbitallength+\columndistance}}{}%
-    % \ifdefstring{\side}{right}{\def\xposs{\orbitallength*2+\columndistance*2}}{}%
+    % \ifdefstring{\side}{middle}{\def\xposs{\orbit@llength+\columndistance}}{}%
+    % \ifdefstring{\side}{right}{\def\xposs{\orbit@llength*2+\columndistance*2}}{}%
 
-    \calculateColumnX{\xposs}{#3}
+    \c@lculateColumnX{\xposs}{#3}
 
     % 3. Der "Text-Splitter" von etoolbox
     % Wir definieren eine Zählvariable für die Position
@@ -321,7 +453,7 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
         \StrBehind{##1}{/}[\tempSpin]%
 
         % X-Position berechnen
-        \pgfmathsetmacro{\ypos}{#1 - ((\orbitaldistance) * (\arrlength - 1)) / 2 + (\currentIdx) * (\orbitaldistance)}%
+        \pgfmathsetmacro{\ypos}{#1 - ((\orbit@ldistance) * (\arrlength - 1)) / 2 + (\currentIdx) * (\orbit@ldistance)}%
 
         \ifcase\currentIdx
         \else
@@ -347,10 +479,10 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
 
 
 
-            \pgfmathsetmacro{\xposleft}{\orbitallength /2 + (\orbitallength * \b + \orbitaldistance * (\b - 1)) /2}
-            \pgfmathsetmacro{\xposmiddleleft}{(\orbitallength + \columndistance) +\orbitallength /2 - (\orbitallength * \d + \orbitaldistance * (\d - 1)) /2}
-            \pgfmathsetmacro{\xposmiddleright}{(\orbitallength + \columndistance)  + + \orbitallength /2+ (\orbitallength * \d + \orbitaldistance * (\d - 1)) /2}
-            \pgfmathsetmacro{\xposright}{(\orbitallength + \columndistance)*2 + \orbitallength /2 - (\orbitallength * \f + \orbitaldistance * (\f - 1)) /2}
+            \pgfmathsetmacro{\xposleft}{\orbit@llength /2 + (\orbit@llength * \b + \orbit@ldistance * (\b - 1)) /2}
+            \pgfmathsetmacro{\xposmiddleleft}{(\orbit@llength + \columndistance) +\orbit@llength /2 - (\orbit@llength * \d + \orbit@ldistance * (\d - 1)) /2}
+            \pgfmathsetmacro{\xposmiddleright}{(\orbit@llength + \columndistance)  + + \orbit@llength /2+ (\orbit@llength * \d + \orbit@ldistance * (\d - 1)) /2}
+            \pgfmathsetmacro{\xposright}{(\orbit@llength + \columndistance)*2 + \orbit@llength /2 - (\orbit@llength * \f + \orbit@ldistance * (\f - 1)) /2}
 
             % \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\name}{\spin}}
             % \tempcall
@@ -369,10 +501,10 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
 
 \newcommand{\sliptogether}[6]{
 
-    \pgfmathsetmacro{\xposleft}{\orbitallength /2 + (\orbitallength * #2 + \orbitaldistance * (#2 - 1)) /2}
-    \pgfmathsetmacro{\xposmiddleleft}{(\orbitallength + \columndistance) +\orbitallength /2 - (\orbitallength * #4 + \orbitaldistance * (#4 - 1)) /2}
-    \pgfmathsetmacro{\xposmiddleright}{(\orbitallength + \columndistance)  + + \orbitallength /2+ (\orbitallength * #4 + \orbitaldistance * (#4 - 1)) /2}
-    \pgfmathsetmacro{\xposright}{(\orbitallength + \columndistance)*2 + \orbitallength /2 - (\orbitallength * #6 + \orbitaldistance * (#6 - 1)) /2}
+    \pgfmathsetmacro{\xposleft}{\orbit@llength /2 + (\orbit@llength * #2 + \orbit@ldistance * (#2 - 1)) /2}
+    \pgfmathsetmacro{\xposmiddleleft}{(\orbit@llength + \columndistance) +\orbit@llength /2 - (\orbit@llength * #4 + \orbit@ldistance * (#4 - 1)) /2}
+    \pgfmathsetmacro{\xposmiddleright}{(\orbit@llength + \columndistance)  + + \orbit@llength /2+ (\orbit@llength * #4 + \orbit@ldistance * (#4 - 1)) /2}
+    \pgfmathsetmacro{\xposright}{(\orbit@llength + \columndistance)*2 + \orbit@llength /2 - (\orbit@llength * #6 + \orbit@ldistance * (#6 - 1)) /2}
 
     % \edef\tempcall{\noexpand\orbital{\xpos}{#1}{\name}{\spin}}
     % \tempcall
@@ -400,10 +532,10 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
         \pgfmathsetmacro{\degright}{#4}
     }%
 
-    \pgfmathsetmacro{\xposleft}{(\orbitallength + \columndistance) * #5 +\orbitallength /2 + (\orbitallength * \degleft + \orbitaldistance * (\degleft - 1)) /2}
-    \pgfmathsetmacro{\xposmiddleleft}{(\orbitallength + \columndistance) * (#5 + 1) +\orbitallength /2 - (\orbitallength * \degright + \orbitaldistance * (\degright - 1)) /2}
+    \pgfmathsetmacro{\xposleft}{(\orbit@llength + \columndistance) * #5 +\orbit@llength /2 + (\orbit@llength * \degleft + \orbit@ldistance * (\degleft - 1)) /2}
+    \pgfmathsetmacro{\xposmiddleleft}{(\orbit@llength + \columndistance) * (#5 + 1) +\orbit@llength /2 - (\orbit@llength * \degright + \orbit@ldistance * (\degright - 1)) /2}
 
-    \draw[dashed, thin, gray] (\xposleft,#1) -- (\xposmiddleleft,#3);
+    \draw[on background layer, dashed, thin, gray] (\xposleft,#1) -- (\xposmiddleleft,#3);
 
 }
 
@@ -469,3 +601,6 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
                 }%
         }%
 }%
+
+
+\makeatother
