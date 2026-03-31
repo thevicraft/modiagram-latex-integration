@@ -33,6 +33,8 @@
     % Code, der beim START ausgeführt wird (\begin{mohelper})
     \begin{tikzpicture}[#1] % Erlaubt zusätzliche TikZ-Optionen
         \setcounter{c@lumns}{-1}
+        \expandafter\typeout\expandafter{\csname invokeL@ter\endcsname}
+        \csgdef{invokeL@ter}{}
         \initdi@gram
         }{%
         % Code, der am ENDE ausgeführt wird (\end{mohelper})
@@ -40,8 +42,12 @@
     \end{tikzpicture}
 }
 
-\def\invokeL@ter{}
+% \def\invokeL@ter{}
 \xdef\@tomside{0}
+
+
+\newcounter{labelID}
+\newcommand{\labelList}{} % Unsere Liste für die IDs
 
 \newcounter{c@lumns}
 \setcounter{c@lumns}{-1}
@@ -50,6 +56,7 @@
     \addtocounter{c@lumns}{1}
     % \def\cs{\csname orbit@list\thec@lumns\endcsname}{}
     \csgdef{orbit@list\thec@lumns}{}
+    \csgdef{l@bel\thec@lumns}{}
     \xdef\@tomside{\thec@lumns}
     #1
     % \ifdefined#2
@@ -117,6 +124,18 @@
     }%
     \dolistcsloop{#1}%
 }
+\ExplSyntaxOn
+
+
+% Wir erstellen eine "Sequence" (eine moderne Liste)
+\seq_new:N \g_mo_labels_seq
+
+% Ein interner Zeichenbefehl
+\cs_new:Npn \__mo_draw_label:nnn #1 #2 #3 {
+    % Hier wird \minY erst beim Aufruf ausgewertet!
+    \node[below=0pt, font=\scriptsize] at (#1, \minY - 0.5 - #2) {#3};
+}
+
 
 % Connects orbitals of the same symmetry group together
 \newcommand{\finish@job}{
@@ -143,12 +162,19 @@
                 }
             }
         }
-    \cslistto@rray{invokeL@ter}{\dolater}
+    \seq_map_function:NN \g_mo_labels_seq \use:n
+    \seq_gclear:N \g_mo_labels_seq
+    % \cslistto@rray{invokeL@ter}{\dolater}
 
-    \foreach \code in \dolater{
-        \code
-    }
+    % \foreach \pos/\offset/\text in \dolater{
+    %     \message{show \text}
+    %     \node[below=0pt, font=\scriptsize] at (\pos,\minY-0.5-\offset) {\text};
+    % }
+
 }
+
+
+
 
 
 
@@ -185,13 +211,27 @@
 \draw[<->, red, {Stealth[scale=0.7]}-{Stealth[scale=0.7]}, semithick] (\xpos,\orbdown) -- (\xpos,\orbup) node[midway, right, font=\footnotesize] {#3};
 }
 
+% \newcommand{\addLabel}[2]{
+%     \c@lculateColumnX{\xpos}{\thec@lumns}
+%     \pgfmathsetmacro{\pos}{\orbit@llength /2 + \xpos}
+%     % \edef\inhalt{#1}
+%     % \listcsxadd{invokeL@ter}{\pos/#2/\inhalt}
+%     \csgdef{l@bel\thec@lumns}{#1}
+% }
+
 \newcommand{\addLabel}[2]{
-    \listcsxadd{invokeL@ter}\expandafter{
-        \c@lculateColumnX{\xpos}{\thec@lumns}
-        \pgfmathsetmacro{\pos}{\orbit@llength /2 + \xpos}
-        \node[below=0pt, font=\scriptsize] at (\pos,\minY-0.5-#2) {#1};
+    \c@lculateColumnX{\xpos}{\thec@lumns}
+    \pgfmathsetmacro{\pos}{\orbit@llength / 2 + \xpos}
+
+    % Wir speichern einen fertigen Funktionsaufruf in der Liste
+    \seq_gput_right:Ne \g_mo_labels_seq {
+        \exp_not:N \__mo_draw_label:nnn
+        {\pos}           % Wird zur Zahl expandiert (eingefroren)
+        {#2}             % Offset wird eingefroren
+        {\exp_not:n {#1}} % Text wird geschützt (nichts passiert)
     }
 }
+\ExplSyntaxOff
 % 1: energy
 % 2: degeneration
 % 3: column
@@ -595,4 +635,16 @@ electroncompact/.style={\electroncolor, very thin, ->, very thin}
     \orbital{\xpos+\orbit@llength+\orbit@ldistance}{#1}{#3}{#7}
     \orbital{\xpos+2*\orbit@llength+2*\orbit@ldistance}{#1}{#4}{#8}
 
+}
+
+
+\newcommand{\addenergyscale}[1]{
+\draw[->, -{Stealth[scale=1.2]}, semithick] (\minX-0.5-#1,\minY-0.5) -- (\minX-0.5-#1,\maxY+0.5) node[anchor=east, font=\footnotesize] {E};
+}
+
+\newcommand{\addlabel}[2]{
+    \foreach \name [count=\i] in {#1}{
+            \pgfmathsetmacro{\pos}{\orbit@llength/2 + (\i - 1) * (\orbit@llength + \columndistance)}
+            \node[below=0pt, font=\scriptsize] at (\pos,\minY-0.5-#2) {\name};
+        }
 }

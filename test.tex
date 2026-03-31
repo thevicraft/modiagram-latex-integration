@@ -217,6 +217,69 @@ some text.
     \end{mohelper}
     \label{fig:modiagram8}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \begin{mohelper}
+        \def\columndistance{3}
+        \def\diagrammode{normal}
+
+        \addOrbital{energy=4}
+        \addOrbital{config=down,sym={a1,t2g},column=1}
+        \addOrbital{energy=4,config=down,sym=a1}
+        \addOrbital{energy=2,config={up,down,pair,down,},labels={hey,,nice,to},label=Scheise,labelposition=top,sym=t2g,column=2}
+        % \connectfurther{4}{1}{0}{1}{0}
+        % \connectfurther{0}{1}{2}{4}{1}
+        \fragment{
+            \addOrbital{energy=-5,config=down,sym=a1}
+        }
+        \fragment{
+            \addOrbital{energy=-1,config=down,sym=a1,label={$\color{blue}{1a_{1g}}$},labelposition=right}
+            \showEnergyDifference{-1,0}{0}{$\Delta_O$}
+        }
+        \fragment{
+            \addOrbital{energy=-1,config=down,sym=a1}
+            \showEnergyDifference{0,2}{0}{$\Delta_T$}
+            \addLabel{$\color{blue}{zorro}$}{0}
+        }
+        \fragment{
+            \addOrbital{energy=-1,config=down,sym=t2g,label=hilfe}
+            \addLabel{$\Psi_e(x)$}{1}
+        }
+        \addEnergyScale{0}
+    \end{mohelper}
+    \label{fig:modiagram9}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{mohelper}
+        % \def\columndistance{5}
+        % \def\diagrammode{normal}
+        \addOrbital{energy=2,config={up,down,pair,down,},labels={hey,,nice,to},label=Scheise,labelposition=top,sym=t2g,column=2}
+
+        \fragment{
+            \addOrbital{energy=0,config=down,sym=a1}
+            \showEnergyDifference{0,2}{0}{$\Delta_T$}
+            \addLabel{$\color{blue}{zorro}$}{0}
+        }
+        \fragment{
+            \addOrbital{energy=-0.8,sym=t2g,config={e,e,e}}
+            \addOrbital{energy=1.2,sym=eg,config={e,e}}
+            \addLabel{$\color{blue}{hey}$}{0}
+        }
+        \fragment{
+            \addLabel{$\color{blue}{hey}$}{0}
+            \addOrbital{energy=0.9,sym=eg,config=e}
+            \addOrbital{energy=1.5,sym=eg,config=e}
+            \addOrbital{energy=-0.2,sym=t2g,config={e}}
+            \addOrbital{energy=-1.1,sym=t2g,config={e,e}}
+        }
+        \addEnergyScale{0}
+    \end{mohelper}
+    \label{fig:modiagram2}
+\end{figure}
+
 % \orbitalist
 
 \end{document}
