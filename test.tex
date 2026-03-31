@@ -196,15 +196,18 @@ some text.
         % \connectfurther{4}{1}{0}{1}{0}
         % \connectfurther{0}{1}{2}{4}{1}
         \fragment{
-            \addOrbital{energy=-3,config=down,sym=a1}
+            \addOrbital{energy=-5,config=down,sym=a1}
+            \addLabel{das hier ist spalte 1}{0}
         }
         \fragment{
             \addOrbital{energy=-1,config=down,sym=a1,label={$\color{blue}{1a_{1g}}$},labelposition=right}
             \showenergydifference{-1,0}{0}{$\Delta_O$}
+            \addLabel{dreck}{0}
         }
         \fragment{
             \addOrbital{energy=-1,config=down,sym=a1}
             \showenergydifference{0,2}{0}{$\Delta_T$}
+            \addLabel{$\color{blue}{1a_{1g}}$}{1}
         }
         \fragment{
             \addOrbital{energy=-1,config=down,sym=t2g}
