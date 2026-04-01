@@ -39,6 +39,7 @@
         }{%
         % Code, der am ENDE ausgeführt wird (\end{mohelper})
         \finish@job
+        \setcounter{c@lumns}{0}
     \end{tikzpicture}
 }
 
@@ -170,7 +171,9 @@
     %     \message{show \text}
     %     \node[below=0pt, font=\scriptsize] at (\pos,\minY-0.5-\offset) {\text};
     % }
-
+    \foreach \i in {-1,0,..., \thec@lumns} {
+            \csgdef{orbit@list\i}{}
+        }
 }
 
 
