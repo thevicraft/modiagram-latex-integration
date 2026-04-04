@@ -203,29 +203,12 @@ function evaluateIt() {
                 }
 
                 preview += `<line class="orbital_line" x1="${xpos}" y1="${+ypos}" x2="${xpos + orbital_width}" y2="${ypos}"/>`;
-                preview += getElectronSVG(xpos, ypos, elektronen[single].split("/")[1]);
+                preview += getElectronSVG(xpos, ypos, elektronen[single]);
                 // add label
                 if (compact && (single === 0)) {
-
-                    // preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[0]}</text>`;
-
-                    // const trick = namesArray[single].split('$');
-                    // if (!disable_mathjax && trick.length > 2) {
-                    //     const g = getImageURL(trick[1]);
-                    //     preview += `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
-                    // } else {
-                    //     preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[single]}</text>`;
-                    // }
                     preview += getPreviewLabelHTMLElement(namesArray[single], xpos, ypos);
 
                 } else if (!compact && (single < namesArray.length)) {
-                    // const trick = namesArray[single].split('$');
-                    // if (!disable_mathjax && trick.length > 2) {
-                    //     const g = getImageURL(trick[1]);
-                    //     preview += `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
-                    // } else {
-                    //     preview += `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${namesArray[single]}</text>`;
-                    // }
                     preview += getPreviewLabelHTMLElement(namesArray[single], xpos, ypos);
                 }
 
@@ -236,12 +219,12 @@ function evaluateIt() {
             }
 
         }
-
+        commands.push(ind2 + '\\fragment{');
         for (let i = 0; i < list.length; i++) {
-            commands.push(ind2 + '\\degenerate{' + list[i][0] + '}{' + elecs[i] + '}{' + side + '}');
+            commands.push(ind2 + '\t\\addOrbital{energy=' + list[i][0] + ',sym={' + list[i][1] + '}' + (elecs[i].length > 0 ? ',config={' + elecs[i] + '}' : '') + (list[i][4].length > 0 ? ',labels={' + list[i][4] + '}' : '') + '}');
             drawPreview(list[i][0], elecs[i], side, list[i][4]);
         }
-
+        commands.push(ind2 + '}');
     }
     function drawConnection(e1, deg1, e2, deg2, side) {
         if (side === 'left') {
@@ -279,14 +262,8 @@ function evaluateIt() {
                 values_middle.forEach(orbital_middle => {
                     if (orbital_middle[1].includes(group)) {
                         // wenn das orbital in der symmetriegruppe drin ist
-                        commands.push(ind2 + '\\connectorbital{' + orbital_left[0] + '}{' + orbital_left[2] + '}{' + orbital_middle[0] + '}{' + orbital_middle[2] + '}{left}');
+                        // commands.push(ind2 + '\\connectorbital{' + orbital_left[0] + '}{' + orbital_left[2] + '}{' + orbital_middle[0] + '}{' + orbital_middle[2] + '}{left}');
                         drawConnection(orbital_left[0], orbital_left[2], orbital_middle[0], orbital_middle[2], 'left');
-                        // values_right.forEach(orbital_right => {
-                        //     if (orbital_right[1].includes(group)) {
-                        //         // wenn das orbital in der symmetriegruppe drin ist
-                        //         commands.push('\\connectorbital{' + orbital_middle[0] + '}{' + orbital_middle[2] + '}{' + orbital_right[0] + '}{' + orbital_right[2] + '}{right}');
-                        //     }
-                        // });
                     }
                 });
             }
@@ -298,7 +275,7 @@ function evaluateIt() {
                 values_right.forEach(orbital_right => {
                     if (orbital_right[1].includes(group)) {
                         // wenn das orbital in der symmetriegruppe drin ist
-                        commands.push(ind2 + '\\connectorbital{' + orbital_middle[0] + '}{' + orbital_middle[2] + '}{' + orbital_right[0] + '}{' + orbital_right[2] + '}{right}');
+                        // commands.push(ind2 + '\\connectorbital{' + orbital_middle[0] + '}{' + orbital_middle[2] + '}{' + orbital_right[0] + '}{' + orbital_right[2] + '}{right}');
                         drawConnection(orbital_middle[0], orbital_middle[2], orbital_right[0], orbital_right[2], 'right');
                     }
                 });
@@ -308,7 +285,7 @@ function evaluateIt() {
     });
 
 
-    commands = removeDuplicates(commands);
+    // commands = removeDuplicates(commands); nicht mehr gebraucht, auf keinen fall entkommentieren!
 
     commands.forEach(c => {
         code += c + "\n";
@@ -330,7 +307,7 @@ function evaluateIt() {
 
 
     if (energy_scale) {
-        code += ind2 + '\\addenergyscale{0}\n';
+        code += ind2 + '\\addEnergyScale{0}\n';
     }
     code += ind1 + '\\end{mohelper}\n';
 
@@ -470,19 +447,19 @@ function returnElecLatexSyntax(obj) {
         let i = 0;
         for (let i = 0; i < +entartung; i++) {
 
-            let names = orbital[4].split(",");
-            if ((names.length > 1) && (i < names.length)) {
-                str += names[i];
-            } else {
-                if (i == 0) { str += orbital[4]; }
-            }
-            str += '/';
+            // let names = orbital[4].split(",");
+            // if ((names.length > 1) && (i < names.length)) {
+            //     str += names[i];
+            // } else {
+            //     if (i == 0) { str += orbital[4]; }
+            // }
+            // str += '/';
             if (+orbital[3] > (+entartung + i)) {
                 str += 'pair';
             } else if (+orbital[3] > i) {
                 str += 'up';
             } else {
-                str += 'empty';
+                // str += '';
             }
             if (i < entartung - 1) { str += ','; }
         }
