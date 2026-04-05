@@ -282,9 +282,15 @@ function evaluateIt() {
         }
         commands.push(ind2 + '\\fragment{');
         for (let i = 0; i < list.length; i++) {
-            commands.push(ind2 + '\t\\addOrbital{energy=' + list[i][0] + ',sym={' + list[i][1] + '}' + (elecs[i].length > 0 ? ',config={' + elecs[i] + '}' : '') + (list[i][4].length > 0 ? ',labels={' + list[i][4] + '}' : '') + '}');
+            commands.push(ind2 + '\t\\addOrbital{energy=' + list[i][0] + ',sym={' + list[i][1] + '}' + (elecs[i].length > 0 ? ',config={' + elecs[i] + '}' : '') + (list[i][4].length > 0 ? ',labels={' + list[i][4] + '}' : '') + (list[i][5].trim().length > 0 ? ',label=' + list[i][5].trim() + ',labelposition=' + ['bottom', 'left', 'up', 'right'][list[i][6]] : '') + '}');
             drawPreview(list[i][0], elecs[i], side, list[i][4], list[i][5], list[i][6]);
         }
+        const clabel = document.getElementById('column_label_' + side).value.trim();
+
+        if (clabel.length > 0) {
+            commands.push(ind2 + `\t\\addLabel{${clabel}}{0}`);
+        }
+
         commands.push(ind2 + '}');
     }
     function drawConnection(e1, deg1, e2, deg2, side) {
@@ -358,7 +364,7 @@ function evaluateIt() {
         const textM = document.getElementById('column_label_middle').value.trim();
         const textR = document.getElementById('column_label_right').value.trim();
         if (textL.length > 0 || textM.length > 0 || textR.length > 0) {
-            code += ind2 + `\\addlabel{${textL},${textM},${textR}}{0}\n`;
+            // code += ind2 + `\\addlabel{${textL},${textM},${textR}}{0}\n`;
             preview += getPreviewLabelHTMLElement(textL, 0, minY - 0.7, 0);
             preview += getPreviewLabelHTMLElement(textM, (column_width + orbital_width), minY - 0.7, 0);
             preview += getPreviewLabelHTMLElement(textR, (column_width + orbital_width) * 2, minY - 0.7, 0);
