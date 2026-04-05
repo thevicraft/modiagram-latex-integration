@@ -275,7 +275,7 @@ td .symmetry {
 
 .orbital_label {
     font-size: 0.3px;
-    text-anchor: middle;
+    /* text-anchor: middle; */
     /* fill: black; */
     transform: scale(1, -1);
     transform-origin: center;

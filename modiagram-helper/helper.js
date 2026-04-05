@@ -70,6 +70,7 @@ function expandLabel(checked) {
 }
 
 function addOrbital(placement, initialenergy, initialsymmetry, initialdegeneration, initialelectrons, initiallabel, initialindlabel, initiallabelposition) {
+    let align = typeof initiallabelposition === 'undefined' ? 0 : Number(initiallabelposition);
     const div = document.createElement('tr');
     div.className = 'orbitals_data_' + placement;
     div.innerHTML = `<td><input type="number" step="0.1" class="energy" onchange="${onchange}" value="${initialenergy}"></td>
@@ -78,15 +79,15 @@ function addOrbital(placement, initialenergy, initialsymmetry, initialdegenerati
             <td><input type="number" min="0" step="1" class="electrons" onchange="${onchange}" value="${initialelectrons}"></td>
             <td>
             <input type="text" class="ilabel" onchange="${onchange}" value="${initialindlabel}">
-            <button class="label_alignment" value="${initiallabelposition}" onclick="
+            <button class="label_alignment" value="${align}" onclick="
 
             let currentVal = parseInt(this.value);
             let nextVal = (currentVal + 1) % 4;
             this.value = nextVal;
             let content =['🡓','🡐','🡑','🡒'];
             this.textContent = content[nextVal];
-
-            ">🡓</button><br>
+            ${onchange}
+            ">${['🡓', '🡐', '🡑', '🡒'][align]}</button><br>
             <input type="text" class="label" onchange="${onchange}" value="${initiallabel}" hidden>
             </td>
             <button class="remove_orbital" onclick="this.parentElement.remove();${onchange}">x</button>
@@ -148,7 +149,7 @@ function evaluateIt() {
     addsymmetry(values_middle);
     addsymmetry(values_right);
 
-    function getPreviewLabelHTMLElement(text, xpos, ypos) {
+    function getPreviewLabelHTMLElement(text, xpos, ypos, align) {
         function getImageURL(latex) {
             const formulaContainer = MathJax.tex2svg(latex);
             const svgElement = formulaContainer.querySelector("svg");
@@ -163,13 +164,22 @@ function evaluateIt() {
         const trick = text.split('$');
         if (!disable_mathjax && trick.length > 2) {
             const g = getImageURL(trick[1]);
+            switch (align) {
+                case 1://links
+                    console.log(g.w / 2);
+                    return `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2 - g.w * 0.1}" y="${ypos - g.h / 2}" width="${g.w}" height="${g.h}"/>`;
+                case 2:
+                    return `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2}" width="${g.w}" height="${g.h}"/>`;
+                case 3:
+                    return `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2 + g.w * 0.1}" y="${ypos - g.h / 2}" width="${g.w}" height="${g.h}"/>`;
+            }
             return `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
         }
-        return `<text class="orbital_label" x="${xpos + orbital_width / 2}" y="${ypos - 0.3}">${text}</text>`;
+        return `<text class="orbital_label" style="text-anchor: ${['middle', 'end', 'middle', 'start'][align]};" x="${xpos + orbital_width / 2}" y="${ypos - (align === 0 ? 0.3 : (align === 2 ? -0.6 : -0.1))}">${text}</text>`;
     }
 
     function drawOrbital(list, elecs, side) {
-        function drawPreview(energy, electrons, side, names) {
+        function drawPreview(energy, electrons, side, names, indlabel, indlabelposition) {
             function getElectronSVG(x, y, type) {
                 mode = 'normal';
                 h = 0.5; // Höhe des Pfeils
@@ -211,10 +221,38 @@ function evaluateIt() {
             } else {
                 x = (column_width + orbital_width) * 2;
             }
-            y = energy;
+            y = Number(energy);
             const elektronen = electrons.split(",");
             const entartung = elektronen.length;
             const namesArray = names.split(",");
+
+
+            let ilabel_x = x;
+            let ilabel_y = y;
+            // console.log("Energy ist:", y, typeof y);
+            // console.log('===');
+            switch (indlabelposition) {
+                case 1:
+                    if (compact) {
+                        ilabel_x -= (orbital_width + orbital_distance) / 2;
+                        break;
+                    }
+                    ilabel_x -= (entartung * (orbital_width + orbital_distance)) / 2;
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    if (compact) {
+                        ilabel_x += (orbital_width + orbital_distance) / 2;
+                        break;
+                    }
+                    ilabel_x += (entartung * (orbital_width + orbital_distance)) / 2;
+                    break;
+            }
+
+            preview += getPreviewLabelHTMLElement(indlabel, ilabel_x, ilabel_y, indlabelposition);
+
+
             for (let single = 0; single < entartung; single++) {
 
                 if (compact) {
@@ -229,10 +267,10 @@ function evaluateIt() {
                 preview += getElectronSVG(xpos, ypos, elektronen[single]);
                 // add label
                 if (compact && (single === 0)) {
-                    preview += getPreviewLabelHTMLElement(namesArray[single], xpos, ypos);
+                    preview += getPreviewLabelHTMLElement(namesArray[single], xpos, ypos, 0);
 
                 } else if (!compact && (single < namesArray.length)) {
-                    preview += getPreviewLabelHTMLElement(namesArray[single], xpos, ypos);
+                    preview += getPreviewLabelHTMLElement(namesArray[single], xpos, ypos, 0);
                 }
 
                 minX = Math.min(minX, xpos);
@@ -245,7 +283,7 @@ function evaluateIt() {
         commands.push(ind2 + '\\fragment{');
         for (let i = 0; i < list.length; i++) {
             commands.push(ind2 + '\t\\addOrbital{energy=' + list[i][0] + ',sym={' + list[i][1] + '}' + (elecs[i].length > 0 ? ',config={' + elecs[i] + '}' : '') + (list[i][4].length > 0 ? ',labels={' + list[i][4] + '}' : '') + '}');
-            drawPreview(list[i][0], elecs[i], side, list[i][4]);
+            drawPreview(list[i][0], elecs[i], side, list[i][4], list[i][5], list[i][6]);
         }
         commands.push(ind2 + '}');
     }
@@ -321,9 +359,9 @@ function evaluateIt() {
         const textR = document.getElementById('column_label_right').value.trim();
         if (textL.length > 0 || textM.length > 0 || textR.length > 0) {
             code += ind2 + `\\addlabel{${textL},${textM},${textR}}{0}\n`;
-            preview += getPreviewLabelHTMLElement(textL, 0, minY - 0.7);
-            preview += getPreviewLabelHTMLElement(textM, (column_width + orbital_width), minY - 0.7);
-            preview += getPreviewLabelHTMLElement(textR, (column_width + orbital_width) * 2, minY - 0.7);
+            preview += getPreviewLabelHTMLElement(textL, 0, minY - 0.7, 0);
+            preview += getPreviewLabelHTMLElement(textM, (column_width + orbital_width), minY - 0.7, 0);
+            preview += getPreviewLabelHTMLElement(textR, (column_width + orbital_width) * 2, minY - 0.7, 0);
             minY = Math.min(minY, minY - 0.7);
         }
     }
@@ -435,7 +473,7 @@ function extractDataFromGUI(placement) {
         const ilabel = row.querySelector('.ilabel').value;
         const ilabel_align = row.querySelector('.label_alignment').value;
 
-        values.push([x, z, y, pop, label, ilabel, ilabel_align]);
+        values.push([x, z, y, pop, label, ilabel, Number(ilabel_align)]);
     });
     return values;
 }
@@ -444,7 +482,7 @@ function extractGUIFromData(data) {
     function addOrbitals(d, side) {
         d.forEach(l => {
             // console.log('->' + side + l[0] + l[1] + l[2] + l[3] + l[4]);
-            addOrbital(side, l[0], l[1], l[2], l[3], l[4]);
+            addOrbital(side, l[0], l[1], l[2], l[3], l[4], l[5], l[6]);
         });
     }
     addOrbitals(data.left, 'left');
