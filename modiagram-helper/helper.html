@@ -67,14 +67,7 @@
                             id="add_energy_scale" unchecked>
                         Add energy scale
                     </label></li>
-                <li><label>
-                        <input type="checkbox" onchange="disable_mathjax = this.checked;evaluateIt();"
-                            id="disable_mathjax" unchecked>
-                        Disable MathJax in preview
-                    </label></li>
-                <li>
-                    <label><input type="checkbox" onchange="expandLabel(this.checked)" unchecked></label>
-                </li>
+                <hr>
                 <li>
                     <label>
                         Column distance:
@@ -82,9 +75,24 @@
                             type="number" id="column_width" step="0.1" value="3">
                     </label>
                 </li>
+                <hr>
+
+                <li>
+                    <label><input type="checkbox" onchange="expandLabel(this.checked)" unchecked>
+                        Show individual labels
+                    </label>
+                </li>
+                <hr>
                 <li>
                     <button onclick="calculateMOs();">predict MOs (experimental)</button>
                 </li>
+                <hr>
+                <hr>
+                <li><label>
+                        <input type="checkbox" onchange="disable_mathjax = this.checked;evaluateIt();"
+                            id="disable_mathjax" unchecked>
+                        Disable MathJax in preview
+                    </label></li>
             </ul>
         </div>
 

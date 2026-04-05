@@ -51,7 +51,7 @@ function addInputArea(name) {
                     <th title="Symmetry Group (Irreducible Representation)">$\\Gamma$</th>
                     <th title="Degeneration (number of orbitals having same energy)">$g_i$</th>
                     <th title="Electrons">$\\upharpoonleft\\downharpoonright $</th>
-                    <th title="Labels (separate by komma for degenerated orbitals)">label</th>
+                    <th title="Label, set the alignment with the arrow button">label</th>
                 </tr>
             </table>
             <button class="add_orbital" onclick="addOrbital('`+ name + `', 0, 'a1', 1, 0, '','',0);${onchange}">+</button>`;
@@ -78,7 +78,7 @@ function addOrbital(placement, initialenergy, initialsymmetry, initialdegenerati
             <td><input type="number" min="1" step="1" class="degeneration" onchange="${onchange}" value="${initialdegeneration}"></td>
             <td><input type="number" min="0" step="1" class="electrons" onchange="${onchange}" value="${initialelectrons}"></td>
             <td>
-            <input type="text" class="ilabel" onchange="${onchange}" value="${initialindlabel}">
+            <input type="text" title="individual labels (separate by komma for degenerated orbitals)" class="ilabel" onchange="${onchange}" value="${initialindlabel}">
             <button class="label_alignment" value="${align}" onclick="
 
             let currentVal = parseInt(this.value);
