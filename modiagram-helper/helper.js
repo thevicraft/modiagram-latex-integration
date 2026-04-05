@@ -54,18 +54,41 @@ function addInputArea(name) {
                     <th title="Labels (separate by komma for degenerated orbitals)">label</th>
                 </tr>
             </table>
-            <button class="add_orbital" onclick="addOrbital('`+ name + `', 0, 'a1', 1, 0, '');${onchange}">+</button>`;
+            <button class="add_orbital" onclick="addOrbital('`+ name + `', 0, 'a1', 1, 0, '','',0);${onchange}">+</button>`;
     document.getElementById('dreispalten').appendChild(div);
 }
 
-function addOrbital(placement, initialenergy, initialsymmetry, initialdegeneration, initialelectrons, initiallabel) {
+function expandLabel(checked) {
+    var obj = document.querySelectorAll('.label');
+    obj.forEach(d => {
+        if (checked) {
+            d.removeAttribute("hidden");
+        } else {
+            d.setAttribute("hidden", "hidden");
+        }
+    });
+}
+
+function addOrbital(placement, initialenergy, initialsymmetry, initialdegeneration, initialelectrons, initiallabel, initialindlabel, initiallabelposition) {
     const div = document.createElement('tr');
     div.className = 'orbitals_data_' + placement;
     div.innerHTML = `<td><input type="number" step="0.1" class="energy" onchange="${onchange}" value="${initialenergy}"></td>
             <td><input type="text" step="0.1" class="symmetry" onchange="${onchange}" value="${initialsymmetry}"></td>
             <td><input type="number" min="1" step="1" class="degeneration" onchange="${onchange}" value="${initialdegeneration}"></td>
             <td><input type="number" min="0" step="1" class="electrons" onchange="${onchange}" value="${initialelectrons}"></td>
-            <td><input type="text" class="label" onchange="${onchange}" value="${initiallabel}"></td>
+            <td>
+            <input type="text" class="ilabel" onchange="${onchange}" value="${initialindlabel}">
+            <button class="label_alignment" value="${initiallabelposition}" onclick="
+
+            let currentVal = parseInt(this.value);
+            let nextVal = (currentVal + 1) % 4;
+            this.value = nextVal;
+            let content =['🡓','🡐','🡑','🡒'];
+            this.textContent = content[nextVal];
+
+            ">🡓</button><br>
+            <input type="text" class="label" onchange="${onchange}" value="${initiallabel}" hidden>
+            </td>
             <button class="remove_orbital" onclick="this.parentElement.remove();${onchange}">x</button>
         `;
 
@@ -346,7 +369,7 @@ function calculateMOs() {
             case 0:
                 break;
             case 1:
-                addOrbital('middle', overlapping[0][0], group, overlapping[0][2], overlapping[0][3], '');
+                addOrbital('middle', overlapping[0][0], group, overlapping[0][2], overlapping[0][3], '', '', 0);
                 break;
             case 2:
                 const average = (Number(overlapping[0][0]) + Number(overlapping[1][0])) / 2;
@@ -357,8 +380,8 @@ function calculateMOs() {
                 const e2 = average + wurzel;
 
                 const n_e = Math.min(+overlapping[0][3], +overlapping[0][2] * 2) + Math.min(+overlapping[1][3], +overlapping[1][2] * 2);//electrons
-                addOrbital('middle', e1, group, Math.min(overlapping[0][2], overlapping[1][2]), Math.min(n_e, overlapping[0][2] * 2), '');
-                addOrbital('middle', e2, group, Math.min(overlapping[0][2], overlapping[1][2]), Math.max(0, n_e - overlapping[0][2] * 2), '');
+                addOrbital('middle', e1, group, Math.min(overlapping[0][2], overlapping[1][2]), Math.min(n_e, overlapping[0][2] * 2), '', '', 0);
+                addOrbital('middle', e2, group, Math.min(overlapping[0][2], overlapping[1][2]), Math.max(0, n_e - overlapping[0][2] * 2), '', '', 0);
                 break;
             default:
                 break;
@@ -409,8 +432,10 @@ function extractDataFromGUI(placement) {
         const y = row.querySelector('.degeneration').value;
         const pop = row.querySelector('.electrons').value;
         const label = row.querySelector('.label').value;
+        const ilabel = row.querySelector('.ilabel').value;
+        const ilabel_align = row.querySelector('.label_alignment').value;
 
-        values.push([x, z, y, pop, label]);
+        values.push([x, z, y, pop, label, ilabel, ilabel_align]);
     });
     return values;
 }
@@ -665,10 +690,10 @@ function copyToClipboard() {
 addInputArea('left');
 addInputArea('middle');
 addInputArea('right');
-addOrbital('left', 0, 'a1', 1, 1, '1s');
-addOrbital('right', 0, 'a1', 1, 1, '1s');
-addOrbital('middle', -2, 'a1', 1, 2, '');
-addOrbital('middle', 2, 'a1', 1, 0, '');
+addOrbital('left', 0, 'a1', 1, 1, '1s', '', 0);
+addOrbital('right', 0, 'a1', 1, 1, '1s', '', 0);
+addOrbital('middle', -2, 'a1', 1, 2, '', '', 0);
+addOrbital('middle', 2, 'a1', 1, 0, '', '', 0);
 loadFromCache();
 
 

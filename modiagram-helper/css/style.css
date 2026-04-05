@@ -206,8 +206,20 @@ td input {
 }
 
 
-td input[type="text"] {
+/* td input[type="text"] {
     width: 60px;
+} */
+
+td .label {
+    width: 80px;
+}
+
+td .ilabel {
+    width: 60px;
+}
+
+td .symmetry {
+    width: 30px;
 }
 
 #mo-preview {
