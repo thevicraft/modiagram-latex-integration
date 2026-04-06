@@ -139,6 +139,8 @@ textarea {
     border-radius: 25px;
     border: 2px solid;
     padding: 10px;
+    tab-size: 4;
+    -o-tab-size: 4;
 }
 
 #make_figure_label {
