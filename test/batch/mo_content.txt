@@ -1,0 +1,24 @@
+\begin{mohelper}
+	\def\columndistance{3}
+	\def\diagrammode{compact}
+	\fragment{
+		\addOrbital{energy=0,sym={t2g,eg},config={,,,,},label=3d,labelposition=left}
+		\addOrbital{energy=3,sym={a1},label=4s,labelposition=left}
+		\addOrbital{energy=4.5,sym={t1u},config={,,},label=4p,labelposition=left}
+		\addLabel{$Me^{n+}$}{0}
+	}
+	\fragment{
+		\addOrbital{energy=0,sym={t2g},config={,,}}
+		\addOrbital{energy=-4,sym={a1}}
+		\addOrbital{energy=6,sym={a1}}
+		\addOrbital{energy=-3,sym={t1u},config={,,}}
+		\addOrbital{energy=6.5,sym={t1u},config={,,}}
+		\addOrbital{energy=-2,sym={eg},config={,}}
+		\addOrbital{energy=1,sym={eg},config={,}}
+	}
+	\fragment{
+		\addOrbital{energy=-1,sym={a1,t1u,eg},config={,,,,,},label=LGO,labelposition=right}
+		\addLabel{6L}{0}
+	}
+	\addEnergyScale{0}
+\end{mohelper}
