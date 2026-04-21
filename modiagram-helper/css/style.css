@@ -282,13 +282,14 @@ td .symmetry {
 }
 
 .orbital_label {
-    font-size: 0.3px;
+    font-size: 0.4px;
     /* text-anchor: middle; */
     /* fill: black; */
     transform: scale(1, -1);
     transform-origin: center;
     transform-box: fill-box;
     padding-bottom: 1px;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 #unsaved_notifier {

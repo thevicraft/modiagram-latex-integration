@@ -78,7 +78,7 @@ function addOrbital(placement, initialenergy, initialsymmetry, initialdegenerati
             <td><input type="number" min="1" step="1" class="degeneration" onchange="${onchange}" value="${initialdegeneration}"></td>
             <td><input type="number" min="0" step="1" class="electrons" onchange="${onchange}" value="${initialelectrons}"></td>
             <td>
-            <input type="text" title="individual labels (separate by komma for degenerated orbitals)" class="ilabel" onchange="${onchange}" value="${initialindlabel}">
+            <input type="text" class="ilabel" onchange="${onchange}" value="${initialindlabel}">
             <button class="label_alignment" value="${align}" onclick="
 
             let currentVal = parseInt(this.value);
@@ -88,7 +88,7 @@ function addOrbital(placement, initialenergy, initialsymmetry, initialdegenerati
             this.textContent = content[nextVal];
             ${onchange}
             ">${['🡓', '🡐', '🡑', '🡒'][align]}</button><br>
-            <input type="text" class="label" onchange="${onchange}" value="${initiallabel}" hidden>
+            <input type="text" title="individual labels (separate by komma for degenerated orbitals)" class="label" onchange="${onchange}" value="${initiallabel}" hidden>
             </td>
             <button class="remove_orbital" onclick="this.parentElement.remove();${onchange}">x</button>
         `;
@@ -175,7 +175,7 @@ function evaluateIt() {
             }
             return `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2 - 1.1}" width="${g.w}" height="${g.h}"/>`;
         }
-        return `<text class="orbital_label" style="text-anchor: ${['middle', 'end', 'middle', 'start'][align]};" x="${xpos + orbital_width / 2}" y="${ypos - (align === 0 ? 0.3 : (align === 2 ? -0.6 : -0.1))}">${text}</text>`;
+        return `<text class="orbital_label" style="text-anchor: ${['middle', 'end', 'middle', 'start'][align]};" x="${xpos + orbital_width / 2}" y="${ypos - (align === 0 ? 0.5 : (align === 2 ? -0.7 : -0.1))}">${text}</text>`;
     }
 
     function drawOrbital(list, elecs, side) {
@@ -734,8 +734,8 @@ function copyToClipboard() {
 addInputArea('left');
 addInputArea('middle');
 addInputArea('right');
-addOrbital('left', 0, 'a1', 1, 1, '1s', '', 0);
-addOrbital('right', 0, 'a1', 1, 1, '1s', '', 0);
+addOrbital('left', 0, 'a1', 1, 1, '', '1s', 1);
+addOrbital('right', 0, 'a1', 1, 1, '', '1s', 3);
 addOrbital('middle', -2, 'a1', 1, 2, '', '', 0);
 addOrbital('middle', 2, 'a1', 1, 0, '', '', 0);
 loadFromCache();

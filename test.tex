@@ -6,7 +6,7 @@
 \usepackage{graphicx}
 \usepackage{color}
 
-\usepackage{mohelper}
+\usepackage{./lib/mohelper}
 
 \title{MO Diagram Integration for LaTeX}
 \author{thevicraft}
@@ -261,7 +261,7 @@ some text.
         \fragment{
             \addOrbital{energy=0,config=down,sym=a1}
             \showEnergyDifference{0,2}{0}{$\Delta_T$}
-            \addLabel{$\color{blue}{zorro}$}{0}
+            \addLabel{$\color{blue}{zorro_J}$}{0}
         }
         \fragment{
             \addOrbital{energy=-0.8,sym=t2g,config={e,e,e}}
@@ -279,6 +279,36 @@ some text.
     \end{mohelper}
     \label{fig:modiagram2}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \begin{mohelper}
+        \def\columndistance{3}
+        \def\diagrammode{normal}
+        \fragment{
+            \addOrbital{energy=3,sym={a2},config={up,up,up},label=2p,labelposition=bottom}
+            \addOrbital{energy=-2,sym={a1},config={pair},label=2s,labelposition=bottom}
+            \addLabel{\large N}{0}
+        }
+        \fragment{
+            \addOrbital{energy=-1,sym={a1},config={pair},label=$\sigma^*$,labelposition=bottom}
+            \addOrbital{energy=-3.8,sym={a1},config={pair},label=$\sigma$,labelposition=bottom}
+            \addOrbital{energy=1.3,sym={a2},config={pair},label=$\sigma$,labelposition=bottom}
+            \addOrbital{energy=5,sym={a2},label=$\sigma^*$,labelposition=bottom}
+            \addOrbital{energy=0.2,sym={a2},config={pair,pair},label=$\pi$,labelposition=bottom}
+            \addOrbital{energy=3.9,sym={a2},config={up,},label=$\pi^*$,labelposition=bottom}
+            \addLabel{\large NO}{0}
+        }
+        \fragment{
+            \addOrbital{energy=2.2,sym={a2},config={pair,up,up},label=2p,labelposition=bottom}
+            \addOrbital{energy=-2.8,sym={a1},config={pair},label=2s,labelposition=bottom}
+            \addLabel{\large O}{0}
+        }
+        \addEnergyScale{0}
+    \end{mohelper}
+    \label{fig:modiagram1}
+\end{figure}
+
 
 % \orbitalist
 

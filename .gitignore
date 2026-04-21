@@ -10,3 +10,4 @@ test.pdf
 *.aux
 indent.log
 docs/tex/*
+modiagram-latex-integration.code-workspace
