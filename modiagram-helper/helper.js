@@ -608,35 +608,6 @@ function loadProject(jsondata) {
     extractGUIFromData(JSON.parse(jsondata));
 }
 
-
-
-//-------------------------------------------------------------------------------------------------
-// beim start der seite wird das hier immer ausgeführt:
-
-document.getElementById('file-upload').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        try {
-            const importedData = JSON.parse(e.target.result);
-
-            Object.keys(importedData).forEach(key => {
-                // hier muss noch das separate speichern gemacht werden, und auch das abfragen nach dem überschreiben!!!
-                changeProject(key, importedData[key]);
-                document.getElementById('project-selector').value = 'null';
-            });
-
-            alert("Successfully loaded new diagram!");
-
-        } catch (err) {
-            alert("Error: Malfunction during JSON parse.");
-        }
-    };
-    reader.readAsText(file);
-    document.getElementById('file-upload').value = "";
-});
-
 function saveToCache() {
     // Wir wandeln das JS-Objekt in einen Text-String um
 
@@ -730,6 +701,60 @@ function copyToClipboard() {
         .then(() => console.log('Copied latex output to clipboard'))
         .catch(err => console.error('Failed to copy: ', err));
 }
+
+//-------------------------------------------------------------------------------------------------
+// beim start der seite wird das hier immer ausgeführt:
+
+document.getElementById('file-upload').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+
+            Object.keys(importedData).forEach(key => {
+                // hier muss noch das separate speichern gemacht werden, und auch das abfragen nach dem überschreiben!!!
+                changeProject(key, importedData[key]);
+                document.getElementById('project-selector').value = 'null';
+            });
+
+            alert("Successfully loaded new diagram!");
+
+        } catch (err) {
+            alert("Error: Malfunction during JSON parse.");
+        }
+    };
+    reader.readAsText(file);
+    document.getElementById('file-upload').value = "";
+});
+
+// Alle Buttons auswählen
+const menuButtons = document.querySelectorAll('.menu-button');
+
+menuButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        // Erstmal alle anderen offenen Menüs schließen
+        document.querySelectorAll('.dropdown-content').forEach(menu => {
+            if (menu !== btn.nextElementSibling) {
+                menu.classList.remove('show');
+            }
+        });
+
+        // Das Menü direkt nach diesem Button umschalten
+        const currentMenu = btn.nextElementSibling;
+        currentMenu.classList.toggle('show');
+
+        e.stopPropagation();
+    });
+});
+
+// Schließen, wenn man irgendwo anders hinklickt
+window.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown-content').forEach(menu => {
+        menu.classList.remove('show');
+    });
+});
 
 addInputArea('left');
 addInputArea('middle');

@@ -7,6 +7,8 @@ body {
 
 .file-controls {
     filter: invert(1);
+    position: relative;
+    z-index: 9999;
 }
 
 #dreispalten {
