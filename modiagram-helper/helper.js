@@ -166,7 +166,7 @@ function evaluateIt() {
             const g = getImageURL(trick[1]);
             switch (align) {
                 case 1://links
-                    console.log(g.w / 2);
+                    // console.log(g.w / 2);
                     return `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2 - g.w * 0.1}" y="${ypos - g.h / 2}" width="${g.w}" height="${g.h}"/>`;
                 case 2:
                     return `<image href="${g.url}" x="${xpos + orbital_width / 2 - g.w / 2}" y="${ypos - g.h * 0.2}" width="${g.w}" height="${g.h}"/>`;

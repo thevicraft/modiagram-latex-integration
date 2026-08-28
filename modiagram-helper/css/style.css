@@ -469,6 +469,6 @@ td .symmetry {
     background-color: #f1f1f1;
 }
 
-.delete {
+#delete {
     color: red !important;
 }
