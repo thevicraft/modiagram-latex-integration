@@ -684,6 +684,35 @@ function saveProject() {
     document.getElementById('project-selector').value = name;
 }
 
+function newProject() {
+    changeProject('unnamed', getEmptyData());
+    document.getElementById('project-selector').value = 'null';
+}
+
+function deleteProject() {
+    // löschen aus dem cache und neue seite
+
+    // dazu 
+    let name = document.getElementById('project-selector').value
+    if (name === "null") {
+        console.log("select project before pressing delete button");
+        return;
+    }
+    if (!saveCheck()) {
+        if (!confirm(`You have unsaved changes. Still continue deleting "${name}"?`)) return;
+    } else {
+        if (!confirm(`Do you really want to delete "${name}"?`)) return;
+    }
+    console.log(`Projekt ${name} wird gelöscht...`);
+    delete cache[name];
+
+    // console.log('vorher: ', cache[name]);
+    saveToCache();
+    // console.log('storage: ' + localStorage.getItem('mo_diagram_db'));
+    loadFromCache();
+    newProject();
+}
+
 function saveCheck() {
     try {
         if (JSON.stringify(getCurrentData()) === JSON.stringify(cache[document.getElementById('file_name_save').value])) {
