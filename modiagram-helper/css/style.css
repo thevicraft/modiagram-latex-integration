@@ -59,14 +59,64 @@ body {
     margin: 0;
     font-family: sans-serif;
     font-size: 14pt;
-    /* padding: 10px; */
     gap: 0px;
-    /* background-image: url('https://wallpapercave.com/wp/wp7449676.jpg'); */
-    background-repeat: no-repeat;
+
+
+
+    /* background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 
     background-image: url('../data/background-image.png');
+    background-attachment: fixed; */
+
+
+
+    /* background-color: #4d4318;
+    background-image:
+        radial-gradient(at 10% 20%, rgba(253, 214, 85, 0.185) 0px, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(240, 180, 40, 0.507) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(240, 40, 230, 0.315) 0px, transparent 50%);
+
+    background-attachment: fixed;
+    background-repeat: no-repeat; */
+
+    background-color: #4d4318;
+
+    background-image:
+        /* 1. LAYER (Ganz oben): Das Logo unten rechts */
+        url('../data/author.png'),
+        url('../data/icon.png'),
+        /* 2. LAYER: Deine bestehenden Radial Gradients */
+        radial-gradient(at 10% 20%, rgba(253, 214, 85, 0.185) 0px, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(240, 180, 40, 0.507) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(240, 40, 230, 0.315) 0px, transparent 50%),
+        /* hier kommt jetzt das grid */
+        radial-gradient(rgba(255, 255, 255, 0.247) 1px, transparent 1px);
+
+    /* Einstellungen für das Logo vs. Gradients (kommagetrennt) */
+    background-position:
+        right 30px bottom 30px,
+        right 30px top 30px,
+        /* Logo-Abstand vom Rand */
+        center, center, center,
+        center;
+    /* Position für die Gradients */
+
+    background-size:
+        40px 40px,
+        40px 40px,
+        /* Größe des Logos */
+        cover, cover, cover,
+        40px 40px;
+    /* Größe für die Gradients */
+
+    background-repeat:
+        no-repeat, no-repeat,
+        /* Logo soll NICHT kacheln */
+        no-repeat, no-repeat, no-repeat,
+        repeat;
+
     background-attachment: fixed;
 }
 
