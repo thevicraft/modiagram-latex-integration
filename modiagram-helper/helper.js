@@ -20,6 +20,8 @@ var maxY = -100;
 
 let cache = {};
 
+const webpage_title = "mohelper Webhelper";
+
 function switchTheme() {
     dark_mode = !dark_mode;
     const themeLink = document.getElementById('theme-link');
@@ -670,6 +672,7 @@ function changeProject(name, data) {
     if (MathJax) {
         MathJax.typeset();
     }
+    document.title = `${name} | ${webpage_title}`;
 }
 
 function saveProject() {
@@ -687,6 +690,7 @@ function saveProject() {
 function newProject() {
     changeProject('unnamed', getEmptyData());
     document.getElementById('project-selector').value = 'null';
+    document.title = webpage_title;
 }
 
 function deleteProject() {
@@ -722,6 +726,7 @@ function saveCheck() {
     } catch (error) {
     }
     document.getElementById('unsaved_notifier').textContent = 'unsaved changes';
+    document.title = `*${document.getElementById('file_name_save').value} | ${webpage_title}`;
     return false;
 }
 
